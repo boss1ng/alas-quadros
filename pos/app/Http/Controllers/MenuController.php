@@ -66,17 +66,34 @@ class MenuController extends Controller
             'image' => 'nullable|image|max:1024', // Max 1MB image
         ]);
 
-        // Store logic for menu item, including image upload
-        if ($request->image) {
-            $imagePath = $request->image->storeAs('menu-images', $request->image->getClientOriginalName(), 'public');
+        // Initialize an array to store updated fields
+        $updatedData = [];
+
+        // Only update name if it has changed
+        if ($request->name && $request->name !== $menu->name) {
+            $updatedData['name'] = $request->name;
         }
 
-        $menu->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'image' => $imagePath ?? null,
-        ]);
+        // Only update description if it has changed
+        if ($request->description !== $menu->description) {
+            $updatedData['description'] = $request->description;
+        }
+
+        // Only update price if it has changed
+        if ($request->price !== $menu->price) {
+            $updatedData['price'] = $request->price;
+        }
+
+        // Handle image upload if it has been changed
+        if ($request->hasFile('image') && $request->image->getClientOriginalName() !== $menu->image) {
+            $imagePath = $request->image->storeAs('menu-images', $request->image->getClientOriginalName(), 'public');
+            $updatedData['image'] = $imagePath;
+        }
+
+        // Update only the changed fields
+        if (!empty($updatedData)) {
+            $menu->update($updatedData);
+        }
 
         // Redirect back to the previous page
         return redirect()->route('menu-management')->with('success', 'Menu item updated successfully!');

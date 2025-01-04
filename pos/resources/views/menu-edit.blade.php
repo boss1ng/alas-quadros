@@ -16,7 +16,7 @@
             <!-- Removed modal styling and positioning -->
             <div class="bg-white rounded-lg shadow-lg w-full p-6">
                 <div class="flex justify-between items-center border-b pb-3">
-                    <h3 id="modalTitle" class="text-lg font-semibold">Add Menu</h3>
+                    <h3 id="modalTitle" class="text-lg font-semibold">Edit Menu</h3>
                 </div>
 
                 <div class="mt-4">
@@ -72,7 +72,8 @@
                         Cancel
                     </a>
                     <button type="submit" id="saveBtn"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        disabled>Save</button>
                 </div>
             </div>
         </div>
@@ -91,7 +92,45 @@
         const menuForm = document.getElementById('menuForm');
         const saveBtn = document.getElementById('saveBtn');
 
-        // Add menu or edit menu logic
+        // Get the current image filename from the backend
+        const currentImage = "{{ asset('storage/' . $menu->image) }}";
+        const currentImageName = currentImage.split('/').pop(); // Extract just the filename
+
+        const initialData = {
+            name: "{{ old('name', $menu->name) }}",
+            description: "{{ old('description', $menu->description) }}",
+            price: "{{ old('price', $menu->price) }}",
+            image: currentImageName
+        };
+
+        const checkChanges = () => {
+            const nameChanged = document.getElementById('menuName').value !== initialData.name;
+            const descriptionChanged = document.getElementById('menuDescription').value !== initialData.description;
+            const priceChanged = document.getElementById('menuPrice').value !== initialData.price;
+            const imageChanged = document.getElementById('menuImage').files.length > 0;
+
+            // If an image is uploaded, check if it's different from the existing image
+            const newImageFile = document.getElementById('menuImage').files[0];
+            const imageFileChanged = newImageFile && newImageFile.name !== initialData.image;
+
+            // Enable or disable the Save button based on changes
+            if (nameChanged || descriptionChanged || priceChanged || imageFileChanged) {
+                saveBtn.disabled = false;
+            } else {
+                saveBtn.disabled = true;
+            }
+        };
+
+        // Initialize Save button state
+        checkChanges();
+
+        // Listen for input changes to check for updates
+        document.getElementById('menuName').addEventListener('input', checkChanges);
+        document.getElementById('menuDescription').addEventListener('input', checkChanges);
+        document.getElementById('menuPrice').addEventListener('input', checkChanges);
+        document.getElementById('menuImage').addEventListener('change', checkChanges);
+
+        // Edit menu logic
         saveBtn.addEventListener('click', () => {
             menuForm.submit(); // Trigger form submission (or implement your own AJAX logic)
         });
