@@ -28,8 +28,8 @@ Route::middleware([
     Route::get('/menu-management', [MenuController::class, 'index'])->name('menu-management');
     Route::post('/menu-management/create', [MenuController::class, 'createMenu'])->name('store');
     Route::delete('/menu-management/delete/{id}', [MenuController::class, 'deleteMenu'])->name('delete');
-    // Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
-    Route::put('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
+    Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
+    Route::post('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
 
 
     Route::get('/user-management', function () {

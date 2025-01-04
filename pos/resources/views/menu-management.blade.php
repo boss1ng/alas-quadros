@@ -48,10 +48,9 @@
                             </td>
                             <td class="px-4 py-2">
                                 <!-- Edit and Delete buttons -->
-                                <button class="bg-yellow-500 text-white px-4 py-2 rounded"
-                                    onclick="openModal({{ $menu->id }})">
+                                <a href="{{ route('edit', ['id' => $menu->id]) }}" class="bg-yellow-500 text-white px-4 py-2 rounded">
                                     Edit
-                                </button>
+                                </a>
                                 <form action="{{ route('delete', ['id' => $menu->id]) }}" method="POST"
                                     onsubmit="return confirm('Are you sure you want to delete this menu?')">
                                     @csrf
@@ -129,6 +128,15 @@
 
     <!-- JavaScript to handle modal functionality -->
     <script>
+        // Check if the success message is present
+        const successMessage = document.getElementById('success-message');
+        if (successMessage) {
+            // Hide the success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // 3000ms = 3 seconds
+        }
+
         // Get elements
         const menuModal = document.getElementById('menuModal');
         const openModalBtn = document.getElementById('openModalBtn');
@@ -139,47 +147,11 @@
         const menuForm = document.getElementById('menuForm');
         const imagePreview = document.getElementById('imagePreview');
 
-        // Open modal for Add menu
+        // Open modal
         openModalBtn.addEventListener('click', () => {
             menuModal.classList.remove('hidden');
-            modalTitle.innerText = 'Add Menu'; // For Add
-            resetForm();
+            modalTitle.innerText = 'Add Menu'; // or 'Edit Menu' for edit
         });
-
-        // Open modal for Edit menu
-        function openModal(menuId) {
-            const menu = @json($menus); // Pass menus to JavaScript
-            const selectedMenu = menu.find(item => item.id === menuId);
-
-            if (selectedMenu) {
-                menuModal.classList.remove('hidden');
-                modalTitle.innerText = 'Edit Menu';
-
-                // Fill the form fields with the selected menu's data
-                document.getElementById('menuName').value = selectedMenu.name;
-                document.getElementById('menuDescription').value = selectedMenu.description;
-                document.getElementById('menuPrice').value = selectedMenu.price;
-
-                // Display the image preview
-                if (selectedMenu.image) {
-                    imagePreview.innerHTML = `<img src="{{ asset('storage') }}/${selectedMenu.image}" alt="Image Preview" class="w-full h-48 object-cover rounded-md">`;
-                } else {
-                    imagePreview.innerHTML = ''; // Clear previous preview
-                }
-
-                // Update the form action for editing
-                const actionUrl = `{{ route('update', ['id' => '__id__']) }}`.replace('__id__', selectedMenu.id);
-                // const actionUrl = `{{ route('update') }}/${menuId}`; // Adjust route if necessary
-                menuForm.setAttribute('action', actionUrl);
-
-                // Add a hidden _method field for PUT request
-                const methodInput = document.createElement('input');
-                methodInput.setAttribute('type', 'hidden');
-                methodInput.setAttribute('name', '_method');
-                methodInput.setAttribute('value', 'PUT');
-                menuForm.appendChild(methodInput);
-            }
-        }
 
         // Close modal
         closeModalBtn.addEventListener('click', () => {
@@ -202,17 +174,9 @@
             }
         });
 
-        // Reset the form fields
-        function resetForm() {
-            document.getElementById('menuName').value = '';
-            document.getElementById('menuDescription').value = '';
-            document.getElementById('menuPrice').value = '';
-            imagePreview.innerHTML = '';
-        }
-
         // Add menu or edit menu logic
         saveBtn.addEventListener('click', () => {
-            menuForm.submit(); // Trigger form submission
+            menuForm.submit(); // Trigger form submission (or implement your own AJAX logic)
         });
     </script>
 </x-app-layout>

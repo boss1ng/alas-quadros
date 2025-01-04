@@ -48,6 +48,12 @@ class MenuController extends Controller
         return back()->with('success', 'Menu item deleted successfully!');
     }
 
+    public function editMenu($id)
+    {
+        $menu = Menu::findOrFail($id);
+        return view('menu-edit', compact('menu'));
+    }
+
     public function updateMenu(Request $request, $id)
     {
         $menu = Menu::findOrFail($id);
@@ -73,6 +79,6 @@ class MenuController extends Controller
         ]);
 
         // Redirect back to the previous page
-        return back()->with('success', 'Menu item updated successfully!');
+        return redirect()->route('menu-management')->with('success', 'Menu item updated successfully!');
     }
 }
