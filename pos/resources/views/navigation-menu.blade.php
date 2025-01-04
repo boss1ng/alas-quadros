@@ -15,6 +15,22 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                        {{ __('Order') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                        {{ __('Sales') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
+                        {{ __('Manage Menu') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                        {{ __('Manage User') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -141,6 +157,22 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                {{ __('Order') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                {{ __('Sales') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
+                {{ __('Manage Menu') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                {{ __('Manage User') }}
             </x-responsive-nav-link>
         </div>
 
