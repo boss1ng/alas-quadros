@@ -24,16 +24,31 @@
                         </div>
 
                         <!-- Menu Items -->
-                        <div class="mb-4">
-                            <label class="block text-gray-700 font-semibold mb-2">Select Menu Items</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
                             @foreach($menus as $menu)
-                            <div class="flex items-center space-x-2 mb-2">
+                            <div class="card bg-white dark:bg-white border rounded-lg shadow-lg p-4 flex flex-col items-center cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-2xl"
+                                data-menu-id="{{ $menu->id }}" id="menuCard_{{ $menu->id }}">
+
+                                <!-- Checkbox for each menu item -->
                                 <input type="checkbox" name="orders[{{ $menu->id }}][selected]" value="1"
-                                    id="menu_{{ $menu->id }}" class="rounded">
-                                <label for="menu_{{ $menu->id }}" class="flex-grow">{{ $menu->name }} - ${{ $menu->price
-                                    }}</label>
+                                    id="menu_{{ $menu->id }}" class="opacity-0 absolute z-10 peer">
+
+                                <!-- Card Content -->
+                                <label for="menu_{{ $menu->id }}"
+                                    class="w-full text-center block peer-checked:bg-gray-200 dark:peer-checked:bg-gray-200 transition-all duration-300 ease-in-out">
+                                    <div class="text-center">
+                                        <div class="flex items-center justify-center">
+                                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }} "
+                                                class="w-32 h-32 object-cover mb-2 rounded-lg">
+                                        </div>
+                                        <h4 class="font-semibold text-lg">{{ $menu->name }}</h4>
+                                        <p class="text-gray-600 mb-2">PHP {{ number_format($menu->price, 2) }}</p>
+                                    </div>
+                                </label>
+
+                                <!-- Quantity Input (enabled/disabled by checkbox state) -->
                                 <input type="number" name="orders[{{ $menu->id }}][quantity]" min="1" value="1"
-                                    class="w-16 border-gray-300 rounded-lg focus:ring focus:ring-blue-500"
+                                    class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500 mt-2 peer-checked:opacity-100 peer-checked:enabled text-center"
                                     placeholder="Qty" disabled>
                             </div>
                             @endforeach
@@ -57,4 +72,42 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Add event listeners to toggle checkbox selection and update total price
+        document.querySelectorAll('.card').forEach(card => {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            const quantityInput = card.querySelector('input[type="number"]');
+
+            checkbox.addEventListener('change', function() {
+                // Enable/disable the quantity input based on the checkbox state
+                quantityInput.disabled = !checkbox.checked;
+
+                // Update the total price
+                updateTotalPrice();
+            });
+
+            quantityInput.addEventListener('input', function() {
+                // Update the total price when quantity changes
+                updateTotalPrice();
+            });
+        });
+
+        // Function to update the total price dynamically based on selected items
+        function updateTotalPrice() {
+            let totalPrice = 0;
+
+            // Loop through selected checkboxes and calculate total price
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                const card = checkbox.closest('.card');
+                const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
+                const quantity = parseInt(card.querySelector('input[type="number"]').value);
+                totalPrice += price * quantity;
+            });
+
+            // Update the total price input field
+            document.getElementById('totalPrice').value = 'PHP ' + totalPrice.toFixed(2);
+        }
+    </script>
+
 </x-app-layout>
