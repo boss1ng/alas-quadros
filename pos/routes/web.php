@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,7 +25,9 @@ Route::middleware([
     })->name('sales');
 
     Route::get('/menu-management', function () {
-        return view('menu-management');
+        $menus = Menu::all();
+
+        return view('menu-management', compact('menus'));
     })->name('menu-management');
 
     Route::get('/user-management', function () {

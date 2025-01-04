@@ -1,24 +1,20 @@
 <div>
-    <!-- Modal Trigger -->
+    <!-- Add Menu Button -->
     <button wire:click="openModal" class="bg-blue-500 text-white px-4 py-2 rounded">
         Add Menu
     </button>
 
-    <!-- Modal -->
+    <!-- Modal for Add/Edit Menu -->
     @if ($isOpen)
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 fade-in">
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
-            <!-- Modal Header -->
             <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="text-lg font-semibold">Add Menu</h3>
-                <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">
-                    &times;
-                </button>
+                <h3 class="text-lg font-semibold">{{ $menuId ? 'Edit Menu' : 'Add Menu' }}</h3>
+                <button wire:click="closeModal" class="text-gray-400 hover:text-gray-600">&times;</button>
             </div>
 
-            <!-- Modal Body -->
             <div class="mt-4">
-                <form wire:submit.prevent="saveMenu">
+                <form wire:submit.prevent="createMenu">
                     <!-- Name Field -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Menu Name</label>
@@ -61,14 +57,9 @@
                 </form>
             </div>
 
-            <!-- Modal Footer -->
             <div class="mt-6 flex justify-end space-x-2">
-                <button wire:click="closeModal" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400">
-                    Cancel
-                </button>
-                <button wire:click="saveMenu" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                    Save
-                </button>
+                <button wire:click="closeModal" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400">Cancel</button>
+                <button wire:click="createMenu" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Save</button>
             </div>
         </div>
     </div>

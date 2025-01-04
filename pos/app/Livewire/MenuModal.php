@@ -4,19 +4,34 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\Menu;
 
 class MenuModal extends Component
 {
     use WithFileUploads;
-    public $name;
-    public $description;
-    public $price;
-    public $image;
 
+    // To hold the list of menus
+    public $menus;
+
+    public $name, $description, $price, $image, $menuId;
     public $isOpen = false;
 
-    public function openModal()
+    protected $listeners = ['menuSaved' => '$refresh', 'menuDeleted' => '$refresh'];
+
+    // Load menu for editing
+    public function openModal($menuId = null)
     {
+        if ($menuId) {
+            $menu = Menu::findOrFail($menuId);
+            $this->menuId = $menu->id;
+            $this->name = $menu->name;
+            $this->description = $menu->description;
+            $this->price = $menu->price;
+            $this->image = null; // Keep image null for edit
+        } else {
+            $this->resetFields();
+        }
+
         $this->isOpen = true;
     }
 
@@ -32,9 +47,10 @@ class MenuModal extends Component
         $this->description = '';
         $this->price = '';
         $this->image = null;
+        $this->menuId = null;
     }
 
-    public function saveMenu()
+    public function createMenu()
     {
         // Validation logic for name, description, price, and image
         $this->validate([
@@ -46,25 +62,65 @@ class MenuModal extends Component
 
         // Store logic for menu item, including image upload
         if ($this->image) {
-            // $imagePath = $this->image->store('images', 'public');
             $imagePath = $this->image->storeAs('menu-images', $this->image->getClientOriginalName(), 'public');
         }
 
-        // Example: Save the menu data to the database
-        // Menu::create([
-        //     'name' => $this->name,
-        //     'description' => $this->description,
-        //     'price' => $this->price,
-        //     'image' => $imagePath ?? null,
-        // ]);
+        Menu::create([
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'image' => $imagePath ?? null,
+        ]);
 
-        // Reset the form after saving
         $this->resetFields();
         $this->closeModal();
     }
 
+    /* public function createMenu()
+    {
+        // Validate inputs
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric',
+            'image' => 'nullable|image|max:1024', // Max 1MB image
+        ]);
+
+        // Store or Update logic
+        $data = [
+            'name' => $this->name,
+            'description' => $this->description,
+            'price' => $this->price,
+            'image' => $this->image ? $this->image->storeAs('menu-images', $this->image->getClientOriginalName(), 'public') : null,
+        ];
+
+        if ($this->menuId) {
+            // Update existing menu item
+            $menu = Menu::findOrFail($this->menuId);
+            $menu->update($data);
+        } else {
+            // Create new menu item
+            Menu::create($data);
+        }
+
+        $this->resetFields();
+        $this->closeModal();
+        $this->emit('menuSaved'); // To refresh the menu list
+    } */
+
+    public function deleteMenu($id)
+    {
+        // Delete menu item by ID
+        $menu = Menu::findOrFail($id);
+        $menu->delete();
+        $this->emit('menuDeleted'); // To refresh the menu list
+    }
+
     public function render()
     {
+        // Retrieve the list of menus to pass to the view
+        $this->menus = Menu::all();
+
         return view('livewire.menu-modal');
     }
 }
