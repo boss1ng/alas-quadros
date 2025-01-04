@@ -123,7 +123,7 @@
                     </div>
 
                     <!-- Image Preview -->
-                    <div id="imagePreview" class="mb-4"></div>
+                    <div id="imagePreview" class="my-4 w-auto h-auto"></div>
 
                 </form>
             </div>
@@ -177,7 +177,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = () => {
-                    imagePreview.innerHTML = `<img src="${reader.result}" alt="Image Preview" class="w-full h-48 object-cover rounded-md">`;
+                    imagePreview.innerHTML = `<img src="${reader.result}" alt="Image Preview" class="w-full h-full object-cover rounded-md">`;
                 };
                 reader.readAsDataURL(file);
             }
