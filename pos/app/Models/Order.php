@@ -13,6 +13,7 @@ class Order extends Model
         'customer_name',
         'orders',
         'total_price',
+        'isPaid'
     ];
 
     protected $casts = [
