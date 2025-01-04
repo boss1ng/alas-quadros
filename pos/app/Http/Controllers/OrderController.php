@@ -90,9 +90,13 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function edit($id)
     {
-        //
+        $menus = Menu::all();
+        $order = Order::findOrFail($id);
+        $orderItems = json_decode($order->orders, true); // Decode the JSON string into an array
+
+        return view('order-edit', compact('menus', 'order', 'orderItems'));
     }
 
     /**
