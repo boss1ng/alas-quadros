@@ -41,7 +41,6 @@ POS of Alas Quadros
 10. Open the terminal by pressing Ctrl + J
 11. Enter the command `cd alas-quadros-pos`
 12. Enter the command `composer install`
-13. Enter the command `npm install`
 
 # How to run the project
 
@@ -51,13 +50,10 @@ POS of Alas Quadros
 4. Enter the command `php artisan migrate`
 5. Enter the command `php artisan key:generate`
 6. Enter the command `php artisan serve`
-7. Open a new terminal
-8. Enter the command `cd alas-quadros-pos`
-9. Enter the command `npm run dev`
 
 # Project Features
 
 1. Laravel Jetstream as Stack
-2. Inertia as Jetstream stack
-3. API, Dark Mode, Email Verification, and Server-side Rendering
+2. Livewire as Jetstream stack
+3. API, Dark Mode, and Email Verification
 4. Pest as Testing Framework
