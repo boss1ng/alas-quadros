@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MenuController;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
@@ -24,11 +25,12 @@ Route::middleware([
         return view('sales');
     })->name('sales');
 
-    Route::get('/menu-management', function () {
-        $menus = Menu::all();
+    Route::get('/menu-management', [MenuController::class, 'index'])->name('menu-management');
+    Route::post('/menu-management/create', [MenuController::class, 'createMenu'])->name('store');
+    Route::delete('/menu-management/delete/{id}', [MenuController::class, 'deleteMenu'])->name('delete');
+    // Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
+    Route::put('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
 
-        return view('menu-management', compact('menus'));
-    })->name('menu-management');
 
     Route::get('/user-management', function () {
         return view('user-management');

@@ -16,7 +16,7 @@ class MenuModal extends Component
     public $name, $description, $price, $image, $menuId;
     public $isOpen = false;
 
-    protected $listeners = ['menuSaved' => '$refresh', 'menuDeleted' => '$refresh'];
+    // protected $listeners = ['menuSaved' => '$refresh', 'menuDeleted' => '$refresh'];
 
     // Load menu for editing
     public function openModal($menuId = null)
@@ -113,7 +113,7 @@ class MenuModal extends Component
         // Delete menu item by ID
         $menu = Menu::findOrFail($id);
         $menu->delete();
-        $this->emit('menuDeleted'); // To refresh the menu list
+        // $this->emit('menuDeleted'); // To refresh the menu list
     }
 
     public function render()
