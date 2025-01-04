@@ -7,6 +7,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(session('success'))
+                <div id="success-message" class="bg-green-500 text-white p-4 mb-4 rounded">
+                    {{ session('success') }}
+                </div>
+            @endif
+
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
 
                 {{-- Order Form --}}
@@ -74,6 +80,15 @@
     </div>
 
     <script>
+        // Check if the success message is present
+        const successMessage = document.getElementById('success-message');
+        if (successMessage) {
+            // Hide the success message after 3 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // 3000ms = 3 seconds
+        }
+
         // Add event listeners to toggle checkbox selection and update total price
         document.querySelectorAll('.card').forEach(card => {
             const checkbox = card.querySelector('input[type="checkbox"]');
@@ -93,20 +108,18 @@
             });
         });
 
-        // Function to update the total price dynamically based on selected items
+        // Update total price dynamically and send numeric value
         function updateTotalPrice() {
             let totalPrice = 0;
 
-            // Loop through selected checkboxes and calculate total price
             document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                const card = checkbox.closest('.card');
-                const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
-                const quantity = parseInt(card.querySelector('input[type="number"]').value);
-                totalPrice += price * quantity;
+            const card = checkbox.closest('.card');
+            const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
+            const quantity = parseInt(card.querySelector('input[type="number"]').value);
+            totalPrice += price * quantity;
             });
 
-            // Update the total price input field
-            document.getElementById('totalPrice').value = 'PHP ' + totalPrice.toFixed(2);
+            document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Send numeric value only
         }
     </script>
 

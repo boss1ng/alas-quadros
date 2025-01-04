@@ -20,6 +20,7 @@ Route::middleware([
 
     Route::get('/order/', [OrderController::class, 'index'])->name('order');
     Route::post('/order/create', [OrderController::class, 'store'])->name('placeOrder');
+    // Route::resource('order', OrderController::class);
 
     Route::get('/sales', function () {
         return view('sales');
