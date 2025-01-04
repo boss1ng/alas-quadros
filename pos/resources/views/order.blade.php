@@ -86,7 +86,7 @@
                                 PHP {{ number_format($order->total_price, 2) }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isPaid ? 'checked' : '' }} disabled />
+                                <input type="checkbox" {{ $order->isPaid ? 'checked' : '' }} class="payment-checkbox" data-order-id="{{ $order->id }}"/>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-md">
                                 <div class="flex items-center justify-center space-x-2">
@@ -123,6 +123,27 @@
                 successMessage.style.display = 'none';
             }, 3000); // 3000ms = 3 seconds
         }
+
+        // Event listener for checkbox click
+        document.querySelectorAll('.payment-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const isChecked = this.checked;
+                const orderId = this.getAttribute('data-order-id');
+
+                // Send the AJAX request to update the payment status
+                fetch(`/order/update-payment/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        isPaid: isChecked
+                    })
+                })
+                .then(response => console.log("Updated payment."))
+            });
+        });
     </script>
 
 </x-app-layout>

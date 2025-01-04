@@ -21,6 +21,7 @@ Route::middleware([
     Route::get('/order/', [OrderController::class, 'index'])->name('order');
     Route::get('/order/new-order', [OrderController::class, 'orderForm'])->name('placeOrder');
     Route::post('/order/new-order/create', [OrderController::class, 'store'])->name('createOrder');
+    Route::post('/order/update-payment/{id}', [OrderController::class, 'updatePayment'])->name('updatePayment');
 
     Route::get('/sales', function () {
         return view('sales');

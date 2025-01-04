@@ -67,6 +67,18 @@ class OrderController extends Controller
         return redirect()->route('order')->with('success', 'Order placed successfully!');
     }
 
+    public function updatePayment(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        // Update the payment status based on the checkbox value
+        $order->isPaid = $request->input('isPaid');
+        $order->save();
+
+        // return back()->with('success', 'Updated payment successfully!');
+        // return view('order-add', compact('menus'));
+    }
+
     /**
      * Display the specified resource.
      */
