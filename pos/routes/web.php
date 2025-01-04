@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\OrderController;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
@@ -17,9 +18,8 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/order', function () {
-        return view('order');
-    })->name('order');
+    Route::get('/order/', [OrderController::class, 'index'])->name('order');
+    Route::post('/order/create', [OrderController::class, 'store'])->name('placeOrder');
 
     Route::get('/sales', function () {
         return view('sales');
@@ -30,7 +30,6 @@ Route::middleware([
     Route::delete('/menu-management/delete/{id}', [MenuController::class, 'deleteMenu'])->name('delete');
     Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
     Route::post('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
-
 
     Route::get('/user-management', function () {
         return view('user-management');
