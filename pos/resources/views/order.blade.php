@@ -65,17 +65,24 @@
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
                                 {{ $order->customer_name }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
                                 @foreach(json_decode($order->orders) as $item)
-                                    <div>{{ $item->menu_id }}</div>
+                                {{-- Find the menu name by matching menu_id --}}
+                                @php
+                                $menu = $menus->firstWhere('id', $item->menu_id);
+                                @endphp
+                                <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
                                 @foreach(json_decode($order->orders) as $item)
-                                    <div>{{ $item->quantity }}</div>
+                                <div>{{ $item->quantity }}</div>
                                 @endforeach
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
                                 PHP {{ number_format($order->total_price, 2) }}
                             </td>
                             <td class="px-6 py-4 text-center">

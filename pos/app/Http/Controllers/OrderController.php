@@ -13,8 +13,9 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $menus = Menu::all();
         $orders = Order::all();
-        return view('order', compact('orders'));
+        return view('order', compact('menus', 'orders'));
     }
 
     public function orderForm()
