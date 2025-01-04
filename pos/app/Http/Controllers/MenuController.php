@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Menu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MenuController extends Controller
 {
@@ -42,6 +43,10 @@ class MenuController extends Controller
     public function deleteMenu($id)
     {
         $menu = Menu::findOrFail($id);
+
+        // Delete the associated files
+        $this->deleteImage($menu);
+
         $menu->delete();
 
         // Redirect back to the previous page
@@ -86,6 +91,9 @@ class MenuController extends Controller
 
         // Handle image upload if it has been changed
         if ($request->hasFile('image') && $request->image->getClientOriginalName() !== $menu->image) {
+            // Delete the associated files
+            $this->deleteImage($menu);
+
             $imagePath = $request->image->storeAs('menu-images', $request->image->getClientOriginalName(), 'public');
             $updatedData['image'] = $imagePath;
         }
@@ -97,5 +105,14 @@ class MenuController extends Controller
 
         // Redirect back to the previous page
         return redirect()->route('menu-management')->with('success', 'Menu item updated successfully!');
+    }
+
+    public function deleteImage($menu)
+    {
+        // Check if the image path is not null and if the file exists
+        if ($menu->image && Storage::disk('public')->exists($menu->image)) {
+            // Delete the file
+            Storage::disk('public')->delete($menu->image);
+        }
     }
 }
