@@ -19,8 +19,8 @@ Route::middleware([
     })->name('dashboard');
 
     Route::get('/order/', [OrderController::class, 'index'])->name('order');
-    Route::post('/order/create', [OrderController::class, 'store'])->name('placeOrder');
-    // Route::resource('order', OrderController::class);
+    Route::get('/order/new-order', [OrderController::class, 'orderForm'])->name('placeOrder');
+    Route::post('/order/new-order/create', [OrderController::class, 'store'])->name('createOrder');
 
     Route::get('/sales', function () {
         return view('sales');

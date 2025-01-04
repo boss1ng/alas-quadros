@@ -13,8 +13,14 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $orders = Order::all();
+        return view('order', compact('orders'));
+    }
+
+    public function orderForm()
+    {
         $menus = Menu::all();
-        return view('order', compact('menus'));
+        return view('order-add', compact('menus'));
     }
 
     /**

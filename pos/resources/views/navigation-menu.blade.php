@@ -17,7 +17,7 @@
                     </x-nav-link>
 
                     <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                        {{ __('Order') }}
+                        {{ __('Manage Orders') }}
                     </x-nav-link>
 
                     <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
@@ -29,7 +29,7 @@
                     </x-nav-link>
 
                     <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
-                        {{ __('Manage User') }}
+                        {{ __('Manage Users') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -160,7 +160,7 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                {{ __('Order') }}
+                {{ __('Manage Orders') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
@@ -172,7 +172,7 @@
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
-                {{ __('Manage User') }}
+                {{ __('Manage Users') }}
             </x-responsive-nav-link>
         </div>
 
