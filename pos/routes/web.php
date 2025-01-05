@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\SalesController;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
@@ -26,9 +27,7 @@ Route::middleware([
     Route::post('/order/update/{id}', [OrderController::class, 'update'])->name('updateOrder');
     Route::delete('/order/delete/{id}', [OrderController::class, 'destroy'])->name('deleteOrder');
 
-    Route::get('/sales', function () {
-        return view('sales');
-    })->name('sales');
+    Route::get('/sales/', [SalesController::class, 'index'])->name('sales');
 
     Route::get('/menu-management', [MenuController::class, 'index'])->name('menu-management');
     Route::post('/menu-management/create', [MenuController::class, 'createMenu'])->name('store');
