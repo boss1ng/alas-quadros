@@ -15,7 +15,7 @@ class SalesController extends Controller
     {
         //
         $menus = Menu::all();
-        $orders = Order::whereDate('created_at', today())->latest()->paginate(2);
+        $orders = Order::whereDate('created_at', today())->latest()->paginate(10);
 
         $allOrders = Order::whereDate('created_at', today());
 
