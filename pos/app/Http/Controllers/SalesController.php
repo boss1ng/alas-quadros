@@ -16,7 +16,7 @@ class SalesController extends Controller
         $menus = Menu::all();
 
         // Default to 'daily' if no filter is applied
-        $filter = $request->input('filter', 'daily');
+        $filter = $request->input('filter', 'all');
         $ordersQuery = Order::query();
 
         // Apply filter logic to $ordersQuery based on the selected filter
@@ -56,9 +56,14 @@ class SalesController extends Controller
                 */
 
             case 'daily':
-            default:
                 // Default filter: today
                 $ordersQuery->whereDate('created_at', today());
+                break;
+
+            case '-':
+            default:
+                // No filter, fetch all orders
+                // No where condition is applied, so all orders will be fetched
                 break;
         }
 

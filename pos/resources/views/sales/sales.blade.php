@@ -12,6 +12,7 @@
                 <label for="filter" class="mr-2 text-lg font-large text-gray-500 dark:text-gray-300">Filter by:</label>
                 <div class="relative">
                     <select id="filter" name="filter" class="bg-blue-500 text-white px-4 py-2 rounded">
+                        <option value="-" {{ request('filter')=='-' ? 'selected' : '' }}>All</option>
                         <option value="daily" {{ request('filter')=='daily' ? 'selected' : '' }}>Daily</option>
                         <option value="weekly" {{ request('filter')=='weekly' ? 'selected' : '' }}>Weekly</option>
                         <option value="monthly" {{ request('filter')=='monthly' ? 'selected' : '' }}>Monthly</option>
