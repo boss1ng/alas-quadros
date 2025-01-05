@@ -10,7 +10,7 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::all();
+        $menus = Menu::all()->paginate('5');
         return view('menu-management', compact('menus'));
     }
 

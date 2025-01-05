@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function index()
     {
         $menus = Menu::all();
-        $orders = Order::all();
+        $orders = Order::latest()->paginate('10');
         return view('order', compact('menus', 'orders'));
     }
 
