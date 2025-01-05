@@ -20,12 +20,12 @@
                         {{ __('Manage Orders') }}
                     </x-nav-link>
 
-                    <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
-                        {{ __('Sales') }}
-                    </x-nav-link>
-
                     <x-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
                         {{ __('Manage Menu') }}
+                    </x-nav-link>
+
+                    <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                        {{ __('Sales') }}
                     </x-nav-link>
 
                     <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
@@ -163,12 +163,12 @@
                 {{ __('Manage Orders') }}
             </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
-                {{ __('Sales') }}
-            </x-responsive-nav-link>
-
             <x-responsive-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
                 {{ __('Manage Menu') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                {{ __('Sales') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
