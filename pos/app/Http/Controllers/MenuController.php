@@ -104,7 +104,7 @@ class MenuController extends Controller
         }
 
         // Redirect back to the previous page
-        return redirect()->route('menu.menu-management')->with('success', 'Menu item updated successfully!');
+        return redirect()->route('menu-management')->with('success', 'Menu item updated successfully!');
     }
 
     public function deleteImage($menu)
