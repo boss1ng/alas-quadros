@@ -43,14 +43,19 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Graphs Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6">
+
                 <!-- Sales Report Graph -->
-                <div class="bg-white p-6 rounded-lg shadow-lg col-span-1 sm:col-span-2 lg:col-span-3">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h3 class="text-xl font-semibold text-gray-800">Sales Report (Last 7 Days)</h3>
                     <canvas id="salesChart"></canvas>
                 </div>
 
                 <!-- By Product Sales Graph -->
-                <div class="bg-white p-6 rounded-lg shadow-lg col-span-1 sm:col-span-2 lg:col-span-3">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
                     <h3 class="text-xl font-semibold text-gray-800">Sales by Product (Last 30 Days)</h3>
                     <canvas id="productSalesChart"></canvas>
                 </div>
