@@ -59,7 +59,7 @@
                         <div id="imagePreview" class="mb-4">
                             @if($menu->image)
                             <img src="{{ asset('storage/' . $menu->image) }}" alt="Menu Image"
-                                class="w-32 h-32 object-cover">
+                                class="object-cover" style="height: 15rem;">
                             @endif
                         </div>
 
