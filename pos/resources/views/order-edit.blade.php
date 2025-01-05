@@ -17,7 +17,7 @@
 
                 {{-- Order Form --}}
                 <div class="bg-white rounded-lg shadow-lg w-full p-6">
-                    <form id="orderForm" method="POST" action="{{ route('createOrder') }}">
+                    <form id="orderForm" method="POST" action="{{ route('updateOrder', ['id' => $order->id]) }}">
                         @csrf
 
                         <!-- Customer Name -->

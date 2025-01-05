@@ -102,9 +102,47 @@ class OrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Order $order)
+    public function update(Request $request, $id)
     {
         //
+
+        $order = Order::findOrFail($id);
+
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'orders' => 'required|array',
+            'orders.*.selected' => 'nullable|boolean',
+            'orders.*.quantity' => 'required_with:orders.*.selected|numeric|min:1',
+            'total_price' => 'required|numeric',
+        ]);
+
+        // Process orders: filter selected items and prepare for JSON encoding
+        $processedOrders = [];
+        foreach ($validatedData['orders'] as $menuId => $orderDetails) {
+            if (isset($orderDetails['selected']) && $orderDetails['selected']) {
+                $processedOrders[] = [
+                    'menu_id' => $menuId,
+                    'quantity' => $orderDetails['quantity'],
+                ];
+            }
+        }
+
+        // Encode the processed orders as JSON
+        $processedOrdersJson = json_encode($processedOrders);
+
+        // Prepare data for update
+        $updatedData = [
+            'customer_name' => $validatedData['customer_name'],
+            'orders' => $processedOrdersJson,
+            'total_price' => $validatedData['total_price'],
+        ];
+
+        // Update the order with the new data
+        $order->update($updatedData);
+
+        // Redirect back to the Order page with a success message
+        return redirect()->route('order')->with('success', 'Order updated successfully!');
     }
 
     /**
