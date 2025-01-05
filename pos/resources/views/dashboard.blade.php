@@ -54,7 +54,7 @@
 
                         <!-- Sales Report Filter Form -->
                         <form method="GET" action="{{ route('dashboard') }}" class="inline-block">
-                            <label for="filter_sales_report" class="mr-4">Filter by Sales Report:</label>
+                            <label for="filter_sales_report" class="mr-4">Filter by:</label>
                             <select name="filter_sales_report" id="filter_sales_report" class="px-4 py-2 border rounded-md"
                                 style="width: 110px;" onchange="this.form.submit()">
                                 <option value="weekly" {{ $filterSalesReport=='weekly' ? 'selected' : '' }}>Weekly</option>
@@ -73,11 +73,11 @@
                 <!-- By Product Sales Graph -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-semibold text-gray-800">Sales by Product</h3>
+                        <h3 class="text-xl font-semibold text-gray-800">By Product Sales</h3>
 
                         <!-- By Product Filter Form -->
                         <form method="GET" action="{{ route('dashboard') }}" class="inline-block">
-                            <label for="filter_product_sales" class="mr-4">Filter by Product Sales:</label>
+                            <label for="filter_product_sales" class="mr-4">Filter by:</label>
                             <select name="filter_product_sales" id="filter_product_sales" class="px-4 py-2 border rounded-md"
                                 style="width: 110px;" onchange="this.form.submit()">
                                 <option value="weekly" {{ $filterProductSales=='weekly' ? 'selected' : '' }}>Weekly</option>
