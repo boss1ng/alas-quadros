@@ -68,7 +68,10 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="flex justify-end">
+                        <div class="flex justify-end space-x-2">
+                            <a href="{{ route('order') }}" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400 inline-block">
+                                Cancel
+                            </a>
                             <button type="submit"
                                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Place Order</button>
                         </div>
