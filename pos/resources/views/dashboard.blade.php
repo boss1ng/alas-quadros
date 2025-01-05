@@ -24,7 +24,7 @@
                 <!-- Today's Sales Card -->
                 <div class="bg-green-100 p-6 rounded-lg shadow-lg">
                     <div class="flex items-center space-x-4">
-                        <i class="fas fa-dollar-sign text-green-600 text-3xl"></i>
+                        <i class="fas fa-peso-sign text-green-600 text-3xl"></i>
                         <div>
                             <h3 class="text-lg font-semibold text-green-600">Today's Sales</h3>
                             <p class="text-3xl font-bold">PHP {{ number_format($todaysSales, 2) }}</p>
