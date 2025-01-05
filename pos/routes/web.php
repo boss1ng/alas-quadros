@@ -22,8 +22,9 @@ Route::middleware([
     Route::get('/order/new-order', [OrderController::class, 'orderForm'])->name('placeOrder');
     Route::post('/order/new-order/create', [OrderController::class, 'store'])->name('createOrder');
     Route::post('/order/update-payment/{id}', [OrderController::class, 'updatePayment'])->name('updatePayment');
-    Route::get('order/edit/{id}', [OrderController::class, 'edit'])->name('editOrder');
-    Route::post('order/update/{id}', [OrderController::class, 'update'])->name('updateOrder');
+    Route::get('/order/edit/{id}', [OrderController::class, 'edit'])->name('editOrder');
+    Route::post('/order/update/{id}', [OrderController::class, 'update'])->name('updateOrder');
+    Route::delete('/order/delete/{id}', [OrderController::class, 'destroy'])->name('deleteOrder');
 
     Route::get('/sales', function () {
         return view('sales');
