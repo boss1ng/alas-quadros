@@ -7,10 +7,17 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex justify-end mb-4">
-                <a class="bg-blue-500 text-white px-4 py-2 rounded">
-                    Filter
-                </a>
+            <div class="flex items-center justify-end mb-4">
+                <!-- Filter Section -->
+                <label for="filter" class="mr-2 text-lg font-large text-gray-500 dark:text-gray-300">Filter by:</label>
+                <div class="relative">
+                    <select id="filter" name="filter" class="bg-blue-500 text-white px-4 py-2 rounded">
+                        <option value="daily" {{ request('filter')=='daily' ? 'selected' : '' }}>Daily</option>
+                        <option value="weekly" {{ request('filter')=='weekly' ? 'selected' : '' }}>Weekly</option>
+                        <option value="monthly" {{ request('filter')=='monthly' ? 'selected' : '' }}>Monthly</option>
+                        <option value="yearly" {{ request('filter')=='yearly' ? 'selected' : '' }}>Yearly</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Sales Table -->
@@ -108,7 +115,12 @@
     </div>
 
     <script>
-
+        document.getElementById('filter').addEventListener('change', function () {
+            const filterValue = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('filter', filterValue);
+            window.location.href = url.toString();
+        });
     </script>
 
 </x-app-layout>

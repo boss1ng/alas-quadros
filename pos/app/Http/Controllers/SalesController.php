@@ -11,16 +11,41 @@ class SalesController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
         $menus = Menu::all();
-        $orders = Order::whereDate('created_at', today())->latest()->paginate(10);
 
-        $allOrders = Order::whereDate('created_at', today());
+        // Default to 'today' if no filter is applied
+        $filter = $request->input('filter', 'daily');
+        $ordersQuery = Order::query();
 
-        // Calculate the total sales for the current orders
-        $totalSales = $allOrders->sum('total_price'); // Using the sum() method on the 'total_price' field
+        switch ($filter) {
+            case 'weekly':
+                // Get orders from the past week
+                $ordersQuery->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                break;
+
+            case 'monthly':
+                // Get orders from the current month
+                $ordersQuery->whereMonth('created_at', now()->month);
+                break;
+
+            case 'yearly':
+                // Get orders from the current year
+                $ordersQuery->whereYear('created_at', now()->year);
+                break;
+
+            case 'daily':
+            default:
+                // Default filter: today
+                $ordersQuery->whereDate('created_at', today());
+                break;
+        }
+
+        $orders = $ordersQuery->latest()->paginate(10);
+
+        // Calculate the total sales for the filtered orders
+        $totalSales = $ordersQuery->sum('total_price');
 
         return view('sales.sales', compact('menus', 'orders', 'totalSales'));
     }
