@@ -43,19 +43,82 @@
                     </div>
                 </div>
 
-                {{-- Insert here the cards containing the graphs/charts/etc. --}}
-                {{--
-                    3 cards at top:
-                        1. Today's Order
-                        2. Today's Sales
-                        3. Registered Users
+                <!-- Sales Report Graph -->
+                <div class="bg-white p-6 rounded-lg shadow-lg col-span-1 sm:col-span-2 lg:col-span-3">
+                    <h3 class="text-xl font-semibold text-gray-800">Sales Report (Last 7 Days)</h3>
+                    <canvas id="salesChart"></canvas>
+                </div>
 
-                    3 Graphs below it
-                        1. Sales Report
-                        2. By Product Sales
-                --}}
+                <!-- By Product Sales Graph -->
+                <div class="bg-white p-6 rounded-lg shadow-lg col-span-1 sm:col-span-2 lg:col-span-3">
+                    <h3 class="text-xl font-semibold text-gray-800">Sales by Product (Last 30 Days)</h3>
+                    <canvas id="productSalesChart"></canvas>
+                </div>
 
             </div>
         </div>
     </div>
+
+    <!-- Add JavaScript for Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Sales Report Chart
+        const salesChartCtx = document.getElementById('salesChart').getContext('2d');
+        const salesData = @json($salesData);
+        new Chart(salesChartCtx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(salesData),
+                datasets: [{
+                    label: 'Total Sales (PHP)',
+                    data: Object.values(salesData),
+                    borderColor: 'rgb(75, 192, 192)',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Sales (PHP)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // By Product Sales Chart
+        const productSalesChartCtx = document.getElementById('productSalesChart').getContext('2d');
+        const productSalesData = @json($productSales);
+        new Chart(productSalesChartCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(productSalesData),
+                datasets: [{
+                    label: 'Sales by Product (PHP)',
+                    data: Object.values(productSalesData),
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Product' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Sales (PHP)' },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+
 </x-app-layout>

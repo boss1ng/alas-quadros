@@ -19,4 +19,10 @@ class Order extends Model
     protected $casts = [
         'orders' => 'array', // Automatically cast JSON to array
     ];
+
+    // Define the relationship with the Menu model
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }
