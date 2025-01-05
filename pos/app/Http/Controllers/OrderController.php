@@ -15,13 +15,13 @@ class OrderController extends Controller
     {
         $menus = Menu::all();
         $orders = Order::latest()->paginate('10');
-        return view('order', compact('menus', 'orders'));
+        return view('order.order', compact('menus', 'orders'));
     }
 
     public function orderForm()
     {
         $menus = Menu::all();
-        return view('order-add', compact('menus'));
+        return view('order.order-add', compact('menus'));
     }
 
     /**
@@ -64,7 +64,7 @@ class OrderController extends Controller
         ]);
 
         // Redirect back with success message
-        return redirect()->route('order')->with('success', 'Order placed successfully!');
+        return redirect()->route('order.order')->with('success', 'Order placed successfully!');
     }
 
     public function updatePayment(Request $request, $id)
@@ -96,7 +96,7 @@ class OrderController extends Controller
         $order = Order::findOrFail($id);
         $orderItems = json_decode($order->orders, true); // Decode the JSON string into an array
 
-        return view('order-edit', compact('menus', 'order', 'orderItems'));
+        return view('order.order-edit', compact('menus', 'order', 'orderItems'));
     }
 
     /**
@@ -142,7 +142,7 @@ class OrderController extends Controller
         $order->update($updatedData);
 
         // Redirect back to the Order page with a success message
-        return redirect()->route('order')->with('success', 'Order updated successfully!');
+        return redirect()->route('order.order')->with('success', 'Order updated successfully!');
     }
 
     /**
