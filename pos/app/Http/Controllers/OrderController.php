@@ -14,7 +14,7 @@ class OrderController extends Controller
     public function index()
     {
         $menus = Menu::all();
-        $orders = Order::latest()->paginate('10');
+        $orders = Order::whereDate('created_at', today())->latest()->paginate(10);
         return view('order.order', compact('menus', 'orders'));
     }
 
