@@ -11,7 +11,7 @@ class MenuController extends Controller
     public function index()
     {
         $menus = Menu::paginate('5');
-        return view('menu-management', compact('menus'));
+        return view('menu.menu-management', compact('menus'));
     }
 
     public function createMenu(Request $request)
@@ -56,7 +56,7 @@ class MenuController extends Controller
     public function editMenu($id)
     {
         $menu = Menu::findOrFail($id);
-        return view('menu-edit', compact('menu'));
+        return view('menu.menu-edit', compact('menu'));
     }
 
     public function updateMenu(Request $request, $id)
@@ -104,7 +104,7 @@ class MenuController extends Controller
         }
 
         // Redirect back to the previous page
-        return redirect()->route('menu-management')->with('success', 'Menu item updated successfully!');
+        return redirect()->route('menu.menu-management')->with('success', 'Menu item updated successfully!');
     }
 
     public function deleteImage($menu)
