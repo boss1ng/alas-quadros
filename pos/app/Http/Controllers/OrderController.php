@@ -64,7 +64,7 @@ class OrderController extends Controller
         ]);
 
         // Redirect back with success message
-        return redirect()->route('order.order')->with('success', 'Order placed successfully!');
+        return redirect()->route('order')->with('success', 'Order placed successfully!');
     }
 
     public function updatePayment(Request $request, $id)
