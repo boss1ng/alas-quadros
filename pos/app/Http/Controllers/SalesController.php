@@ -15,8 +15,14 @@ class SalesController extends Controller
     {
         //
         $menus = Menu::all();
-        $orders = Order::whereDate('created_at', today())->latest()->paginate(10);
-        return view('sales.sales', compact('menus', 'orders'));
+        $orders = Order::whereDate('created_at', today())->latest()->paginate(2);
+
+        $allOrders = Order::whereDate('created_at', today());
+
+        // Calculate the total sales for the current orders
+        $totalSales = $allOrders->sum('total_price'); // Using the sum() method on the 'total_price' field
+
+        return view('sales.sales', compact('menus', 'orders', 'totalSales'));
     }
 
     /**
