@@ -63,30 +63,6 @@ class DashboardController extends Controller
         return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterPeriod'));
     }
 
-    public function getSalesData(Request $request)
-    {
-        $timePeriod = $request->input('time_period', 7);  // Default to 7 days if no value is provided
-
-        // Sales Data based on the selected time period
-        $salesData = Order::where('created_at', '>=', Carbon::now()->subDays($timePeriod))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(total_price) as total_sales'))
-            ->pluck('total_sales', 'date');
-
-        // By Product Sales - Adjust this as needed
-        $productSales = Order::with('menu')
-            ->where('created_at', '>=', Carbon::now()->subDays($timePeriod))
-            ->get()
-            ->groupBy('menu_id')
-            ->map(fn($orders) => $orders->sum('total_price'))
-            ->sortDesc();
-
-        return response()->json([
-            'salesData' => $salesData,
-            'productSales' => $productSales,
-        ]);
-    }
-
     /**
      * Show the form for creating a new resource.
      */
