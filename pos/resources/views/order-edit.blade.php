@@ -95,47 +95,85 @@
                 successMessage.style.display = 'none';
             }, 3000); // 3000ms = 3 seconds
         }
+    </script>
 
-        // Add event listeners to toggle checkbox selection and update total price
-        document.querySelectorAll('.card').forEach(card => {
-            const checkbox = card.querySelector('input[type="checkbox"]');
-            const quantityInput = card.querySelector('input[type="number"]');
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const originalState = new Map();
 
-            checkbox.addEventListener('change', function() {
-                // Enable/disable the quantity input based on the checkbox state
+            // Save the original state
+            document.querySelectorAll('.card').forEach(card => {
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                const quantityInput = card.querySelector('input[type="number"]');
+
+                const menuId = card.getAttribute('data-menu-id');
+                originalState.set(menuId, {
+                    selected: checkbox.checked,
+                    quantity: parseInt(quantityInput.value),
+                });
+
+                // Enable or disable quantity input on page load
                 quantityInput.disabled = !checkbox.checked;
-
-                // Update the total price
-                updateTotalPrice();
-                toggleSaveButton();
             });
 
-            quantityInput.addEventListener('input', function() {
-                // Update the total price when quantity changes
-                updateTotalPrice();
+            document.querySelectorAll('.card').forEach(card => {
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                const quantityInput = card.querySelector('input[type="number"]');
+                const menuId = card.getAttribute('data-menu-id');
+
+                checkbox.addEventListener('change', function () {
+                    // Enable/disable the quantity input based on the checkbox state
+                    quantityInput.disabled = !checkbox.checked;
+
+                    // Reset quantity to 1 if checkbox is checked and it was disabled before
+                    if (checkbox.checked && quantityInput.disabled) {
+                        quantityInput.value = 1;
+                    }
+
+                    updateTotalPrice();
+                    toggleSaveButton();
+                });
+
+                quantityInput.addEventListener('input', function () {
+                    updateTotalPrice();
+                    toggleSaveButton();
+                });
             });
+
+            function updateTotalPrice() {
+                let totalPrice = 0;
+
+                document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                    const card = checkbox.closest('.card');
+                    const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
+                    const quantity = parseInt(card.querySelector('input[type="number"]').value);
+                    totalPrice += price * quantity;
+                });
+
+                document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Numeric value only
+            }
+
+            function toggleSaveButton() {
+                const saveButton = document.getElementById('saveButton');
+                let hasChanges = false;
+
+                document.querySelectorAll('.card').forEach(card => {
+                    const checkbox = card.querySelector('input[type="checkbox"]');
+                    const quantityInput = card.querySelector('input[type="number"]');
+                    const menuId = card.getAttribute('data-menu-id');
+
+                    const original = originalState.get(menuId);
+                    if (
+                        checkbox.checked !== original.selected ||
+                        (checkbox.checked && parseInt(quantityInput.value) !== original.quantity)
+                    ) {
+                        hasChanges = true;
+                    }
+                });
+
+                saveButton.disabled = !hasChanges;
+            }
         });
-
-        // Update total price dynamically and send numeric value
-        function updateTotalPrice() {
-            let totalPrice = 0;
-
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-                const card = checkbox.closest('.card');
-                const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
-                const quantity = parseInt(card.querySelector('input[type="number"]').value);
-                totalPrice += price * quantity;
-            });
-
-            document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Send numeric value only
-        }
-
-        // Enable the save button if any changes are made
-        function toggleSaveButton() {
-            const saveButton = document.getElementById('saveButton');
-            const hasChanges = document.querySelectorAll('input[type="checkbox"]:checked').length > 0;
-            saveButton.disabled = !hasChanges;
-        }
     </script>
 
 </x-app-layout>
