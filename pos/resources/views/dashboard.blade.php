@@ -137,10 +137,10 @@
         new Chart(productSalesChartCtx, {
             type: 'bar',
             data: {
-                labels: Object.keys(productSalesData).map(id => menuNames[id]),
+                labels: Object.keys(productSalesData).map(id => menuNames[id]),  // Using menu names as labels
                 datasets: [{
-                    label: 'Sales by Product (PHP)',
-                    data: Object.values(productSalesData),
+                    label: 'Total Quantity Sold by Product',
+                    data: Object.values(productSalesData),  // Displaying quantity sold per product
                     backgroundColor: 'rgb(255, 99, 132)',
                     borderColor: 'rgb(255, 99, 132)',
                     borderWidth: 1
@@ -150,10 +150,10 @@
                 responsive: true,
                 scales: {
                     x: {
-                        title: { display: true, text: 'Product' }
+                        title: { display: true, text: 'Product' },
                     },
                     y: {
-                        title: { display: true, text: 'Sales (PHP)' },
+                        title: { display: true, text: 'Quantity Sold' },  // Changed to "Quantity Sold"
                         beginAtZero: true
                     }
                 }

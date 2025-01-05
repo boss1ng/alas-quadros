@@ -72,14 +72,14 @@ class DashboardController extends Controller
             ->flatMap(function ($order) {
                 return collect(json_decode($order->orders))->mapWithKeys(function ($item) use ($order) {
                     return [
-                        $item->menu_id => $item->quantity * $order->total_price / 100,
+                        $item->menu_id => $item->quantity,  // Now we're counting the quantity sold per product
                     ];
                 });
             })
             ->groupBy(function ($item, $key) {
                 return $key;
             })
-            ->map(fn($items) => $items->sum())
+            ->map(fn($items) => $items->sum()) // Summing the quantities sold per product
             ->sortDesc();
 
         // Fetch the product names
