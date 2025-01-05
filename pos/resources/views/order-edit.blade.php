@@ -74,7 +74,12 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div class="flex justify-end">
+                        <div class="flex justify-end space-x-2">
+                            <a href="{{ route('order') }}"
+                                class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400 inline-block">
+                                Cancel
+                            </a>
+
                             <button type="submit" id="saveButton"
                                 class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
                                 disabled>Save</button>
