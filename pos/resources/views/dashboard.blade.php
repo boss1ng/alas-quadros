@@ -50,8 +50,6 @@
                 <!-- Sales Report Graph -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
                     <div class="flex items-center justify-between">
-
-
                         <h3 class="text-xl font-semibold text-gray-800">Sales Report</h3>
 
                         <!-- Filter Options -->
