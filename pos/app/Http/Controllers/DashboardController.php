@@ -25,42 +25,67 @@ class DashboardController extends Controller
         // Registered Users count
         $registeredUsers = User::count();
 
-        // Get the filter period (default is weekly)
-        $filterPeriod = $request->input('filter', 'weekly');  // weekly is the default
+        // Get the filter periods (for Sales Report and By Product separately)
+        $filterSalesReport = $request->input('filter_sales_report', 'weekly');
+        $filterProductSales = $request->input('filter_product_sales', 'weekly');
 
-        // Determine the start and end date based on the selected period
-        $startDate = Carbon::now();
-        $endDate = Carbon::now();
+        // Determine the start and end dates for the filters
+        $startDateSalesReport = Carbon::now();
+        $endDateSalesReport = Carbon::now();
 
-        if ($filterPeriod == 'weekly') {
-            // This week (starting from the last Sunday to today)
-            $startDate = Carbon::now()->startOfWeek();
-            $endDate = Carbon::now()->endOfWeek();
-        } elseif ($filterPeriod == 'monthly') {
-            // This month (starting from the first of the month to today)
-            $startDate = Carbon::now()->startOfMonth();
-            $endDate = Carbon::now()->endOfMonth();
-        } elseif ($filterPeriod == 'yearly') {
-            // This year (starting from January 1st to today)
-            $startDate = Carbon::now()->startOfYear();
-            $endDate = Carbon::now()->endOfYear();
+        if ($filterSalesReport == 'weekly') {
+            $startDateSalesReport = Carbon::now()->startOfWeek();
+            $endDateSalesReport = Carbon::now()->endOfWeek();
+        } elseif ($filterSalesReport == 'monthly') {
+            $startDateSalesReport = Carbon::now()->startOfMonth();
+            $endDateSalesReport = Carbon::now()->endOfMonth();
+        } elseif ($filterSalesReport == 'yearly') {
+            $startDateSalesReport = Carbon::now()->startOfYear();
+            $endDateSalesReport = Carbon::now()->endOfYear();
         }
 
-        // Sales Report for the selected period (Weekly, Monthly, or Yearly)
-        $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
+        // Sales Report for the selected period (Sales Report Filter)
+        $salesData = Order::whereBetween('created_at', [$startDateSalesReport, $endDateSalesReport])
             ->groupBy(DB::raw('DATE(created_at)'))
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(total_price) as total_sales'))
             ->pluck('total_sales', 'date');
 
-        // By Product Sales (no change in logic)
+        // Determine the start and end dates for the By Product Sales filter
+        $startDateProductSales = Carbon::now();
+        $endDateProductSales = Carbon::now();
+
+        if ($filterProductSales == 'weekly') {
+            $startDateProductSales = Carbon::now()->startOfWeek();
+            $endDateProductSales = Carbon::now()->endOfWeek();
+        } elseif ($filterProductSales == 'monthly') {
+            $startDateProductSales = Carbon::now()->startOfMonth();
+            $endDateProductSales = Carbon::now()->endOfMonth();
+        } elseif ($filterProductSales == 'yearly') {
+            $startDateProductSales = Carbon::now()->startOfYear();
+            $endDateProductSales = Carbon::now()->endOfYear();
+        }
+
+        // By Product Sales for the selected period (Product Sales Filter)
         $productSales = Order::with('menu')
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startDateProductSales, $endDateProductSales])
             ->get()
-            ->groupBy('menu_id')
-            ->map(fn($orders) => $orders->sum('total_price'))
+            ->flatMap(function ($order) {
+                return collect(json_decode($order->orders))->mapWithKeys(function ($item) use ($order) {
+                    return [
+                        $item->menu_id => $item->quantity * $order->total_price / 100,
+                    ];
+                });
+            })
+            ->groupBy(function ($item, $key) {
+                return $key;
+            })
+            ->map(fn($items) => $items->sum())
             ->sortDesc();
 
-        return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterPeriod'));
+        // Fetch the product names
+        $menuNames = Menu::whereIn('id', $productSales->keys())->pluck('name', 'id');
+
+        return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterSalesReport', 'filterProductSales', 'menuNames'));
     }
 
     /**

@@ -52,17 +52,19 @@
                     <div class="flex items-center justify-between">
                         <h3 class="text-xl font-semibold text-gray-800">Sales Report</h3>
 
-                        <!-- Filter Options -->
-                        <div class="flex items-center justify-between">
-                            <form method="GET" action="{{ route('dashboard') }}">
-                                <label for="filter" class="mr-4">Filter by:</label>
-                                <select name="filter" id="filter" class="px-4 py-2 border rounded-md" style="width: 110px;" onchange="this.form.submit()">
-                                    <option value="weekly" {{ $filterPeriod=='weekly' ? 'selected' : '' }}>Weekly</option>
-                                    <option value="monthly" {{ $filterPeriod=='monthly' ? 'selected' : '' }}>Monthly</option>
-                                    <option value="yearly" {{ $filterPeriod=='yearly' ? 'selected' : '' }}>Yearly</option>
-                                </select>
-                            </form>
-                        </div>
+                        <!-- Sales Report Filter Form -->
+                        <form method="GET" action="{{ route('dashboard') }}" class="inline-block">
+                            <label for="filter_sales_report" class="mr-4">Filter by Sales Report:</label>
+                            <select name="filter_sales_report" id="filter_sales_report" class="px-4 py-2 border rounded-md"
+                                style="width: 110px;" onchange="this.form.submit()">
+                                <option value="weekly" {{ $filterSalesReport=='weekly' ? 'selected' : '' }}>Weekly</option>
+                                <option value="monthly" {{ $filterSalesReport=='monthly' ? 'selected' : '' }}>Monthly</option>
+                                <option value="yearly" {{ $filterSalesReport=='yearly' ? 'selected' : '' }}>Yearly</option>
+                            </select>
+
+                            <!-- Keep the filter_product_sales in the URL when the sales report filter is changed -->
+                            <input type="hidden" name="filter_product_sales" value="{{ request('filter_product_sales', 'weekly') }}">
+                        </form>
                     </div>
 
                     <canvas id="salesChart"></canvas>
@@ -70,7 +72,24 @@
 
                 <!-- By Product Sales Graph -->
                 <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold text-gray-800">Sales by Product</h3>
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-semibold text-gray-800">Sales by Product</h3>
+
+                        <!-- By Product Filter Form -->
+                        <form method="GET" action="{{ route('dashboard') }}" class="inline-block">
+                            <label for="filter_product_sales" class="mr-4">Filter by Product Sales:</label>
+                            <select name="filter_product_sales" id="filter_product_sales" class="px-4 py-2 border rounded-md"
+                                style="width: 110px;" onchange="this.form.submit()">
+                                <option value="weekly" {{ $filterProductSales=='weekly' ? 'selected' : '' }}>Weekly</option>
+                                <option value="monthly" {{ $filterProductSales=='monthly' ? 'selected' : '' }}>Monthly</option>
+                                <option value="yearly" {{ $filterProductSales=='yearly' ? 'selected' : '' }}>Yearly</option>
+                            </select>
+
+                            <!-- Keep the filter_sales_report in the URL when the product sales filter is changed -->
+                            <input type="hidden" name="filter_sales_report" value="{{ request('filter_sales_report', 'weekly') }}">
+                        </form>
+                    </div>
+
                     <canvas id="productSalesChart"></canvas>
                 </div>
             </div>
@@ -82,62 +101,64 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Sales Report Chart
-            const salesChartCtx = document.getElementById('salesChart').getContext('2d');
-            const salesData = @json($salesData);
-            new Chart(salesChartCtx, {
-                type: 'line',
-                data: {
-                    labels: Object.keys(salesData),
-                    datasets: [{
-                        label: 'Total Sales (PHP)',
-                        data: Object.values(salesData),
-                        borderColor: 'rgb(75, 192, 192)',
-                        fill: false,
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Date' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Sales (PHP)' },
-                            beginAtZero: true
-                        }
+        const salesChartCtx = document.getElementById('salesChart').getContext('2d');
+        const salesData = @json($salesData);
+        new Chart(salesChartCtx, {
+            type: 'line',
+            data: {
+                labels: Object.keys(salesData),
+                datasets: [{
+                    label: 'Total Sales (PHP)',
+                    data: Object.values(salesData),
+                    borderColor: 'rgb(75, 192, 192)',
+                    fill: false,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Date' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Sales (PHP)' },
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
 
-            // By Product Sales Chart
-            const productSalesChartCtx = document.getElementById('productSalesChart').getContext('2d');
-            const productSalesData = @json($productSales);
-            new Chart(productSalesChartCtx, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(productSalesData),
-                    datasets: [{
-                        label: 'Sales by Product (PHP)',
-                        data: Object.values(productSalesData),
-                        backgroundColor: 'rgb(255, 99, 132)',
-                        borderColor: 'rgb(255, 99, 132)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: { display: true, text: 'Product' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Sales (PHP)' },
-                            beginAtZero: true
-                        }
+        // By Product Sales Chart
+        const productSalesChartCtx = document.getElementById('productSalesChart').getContext('2d');
+        const productSalesData = @json($productSales);
+        const menuNames = @json($menuNames);
+
+        new Chart(productSalesChartCtx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(productSalesData).map(id => menuNames[id]),
+                datasets: [{
+                    label: 'Sales by Product (PHP)',
+                    data: Object.values(productSalesData),
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Product' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Sales (PHP)' },
+                        beginAtZero: true
                     }
                 }
-            });
+            }
+        });
     </script>
 
 </x-app-layout>
