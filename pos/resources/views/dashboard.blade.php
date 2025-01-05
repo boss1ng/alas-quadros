@@ -131,18 +131,21 @@
 
         // By Product Sales Chart
         const productSalesChartCtx = document.getElementById('productSalesChart').getContext('2d');
-        const productSalesData = @json($productSales);
-        const menuNames = @json($menuNames);
+        const productSalesNames = @json($productSalesNames);
+        const productSalesQuantities = @json($productSalesQuantities);
+
+        console.log("Menus ", productSalesNames)
+        console.log("Qty ", productSalesQuantities)
 
         new Chart(productSalesChartCtx, {
             type: 'bar',
             data: {
-                labels: Object.keys(productSalesData).map(id => menuNames[id]),  // Using menu names as labels
+                labels: productSalesNames,
                 datasets: [{
-                    label: 'Total Quantity Sold by Product',
-                    data: Object.values(productSalesData),  // Displaying quantity sold per product
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
+                    label: 'Quantity Sold',
+                    data: productSalesQuantities,
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
                     borderWidth: 1
                 }]
             },
@@ -150,15 +153,16 @@
                 responsive: true,
                 scales: {
                     x: {
-                        title: { display: true, text: 'Product' },
+                        title: { display: true, text: 'Menu Items' }
                     },
                     y: {
-                        title: { display: true, text: 'Quantity Sold' },  // Changed to "Quantity Sold"
+                        title: { display: true, text: 'Quantity Sold' },
                         beginAtZero: true
                     }
                 }
             }
         });
+
     </script>
 
 </x-app-layout>

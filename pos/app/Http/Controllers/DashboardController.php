@@ -48,6 +48,7 @@ class DashboardController extends Controller
         $salesData = Order::whereBetween('created_at', [$startDateSalesReport, $endDateSalesReport])
             ->groupBy(DB::raw('DATE(created_at)'))
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(total_price) as total_sales'))
+            ->get()
             ->pluck('total_sales', 'date');
 
         // Determine the start and end dates for the By Product Sales filter
@@ -66,26 +67,43 @@ class DashboardController extends Controller
         }
 
         // By Product Sales for the selected period (Product Sales Filter)
-        $productSales = Order::with('menu')
-            ->whereBetween('created_at', [$startDateProductSales, $endDateProductSales])
+        $productSales = Order::whereBetween('created_at', [$startDateProductSales, $endDateProductSales])
             ->get()
             ->flatMap(function ($order) {
-                return collect(json_decode($order->orders))->mapWithKeys(function ($item) use ($order) {
-                    return [
-                        $item->menu_id => $item->quantity,  // Now we're counting the quantity sold per product
-                    ];
-                });
+                $decodedOrders = json_decode($order->orders, true);
+                if (!is_array($decodedOrders)) {
+                    return [];
+                }
+                return collect($decodedOrders);
             })
-            ->groupBy(function ($item, $key) {
-                return $key;
-            })
-            ->map(fn($items) => $items->sum()) // Summing the quantities sold per product
-            ->sortDesc();
+            ->groupBy('menu_id')
+            ->map(function ($items, $menuId) {
+                return [
+                    'menu_id' => $menuId,
+                    'quantity' => $items->sum('quantity'),
+                ];
+            });
 
-        // Fetch the product names
-        $menuNames = Menu::whereIn('id', $productSales->keys())->pluck('name', 'id');
+        // Fetch names for `menu_id` from the Menu model
+        $menuNames = Menu::whereIn('id', $productSales->pluck('menu_id'))->pluck('name', 'id');
 
-        return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterSalesReport', 'filterProductSales', 'menuNames'));
+        $productSalesNames = $productSales->pluck('menu_id')->map(fn($id) => $menuNames[$id] ?? 'Unknown');
+        $productSalesQuantities = $productSales->pluck('quantity');
+
+        // \Log::info('Product Sales: ', $productSalesNames->toArray());
+        // \Log::info('Menu Names: ', $productSalesQuantities->toArray());
+
+        // return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterSalesReport', 'filterProductSales', 'menuNames'));
+        return view('dashboard', compact(
+            'todaysOrders',
+            'todaysSales',
+            'registeredUsers',
+            'salesData',
+            'filterSalesReport',
+            'filterProductSales',
+            'productSalesNames',
+            'productSalesQuantities'
+        ));
     }
 
     /**
