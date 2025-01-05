@@ -14,7 +14,7 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Today's Orders
         $todaysOrders = Order::whereDate('created_at', Carbon::today())->count();
@@ -25,21 +25,66 @@ class DashboardController extends Controller
         // Registered Users count
         $registeredUsers = User::count();
 
-        // Sales Report for the last 7 days (or any time period you want)
-        $salesData = Order::where('created_at', '>=', Carbon::now()->subDays(7))
+        // Get the filter period (default is weekly)
+        $filterPeriod = $request->input('filter', 'weekly');  // weekly is the default
+
+        // Determine the start and end date based on the selected period
+        $startDate = Carbon::now();
+        $endDate = Carbon::now();
+
+        if ($filterPeriod == 'weekly') {
+            // This week (starting from the last Sunday to today)
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfWeek();
+        } elseif ($filterPeriod == 'monthly') {
+            // This month (starting from the first of the month to today)
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
+        } elseif ($filterPeriod == 'yearly') {
+            // This year (starting from January 1st to today)
+            $startDate = Carbon::now()->startOfYear();
+            $endDate = Carbon::now()->endOfYear();
+        }
+
+        // Sales Report for the selected period (Weekly, Monthly, or Yearly)
+        $salesData = Order::whereBetween('created_at', [$startDate, $endDate])
             ->groupBy(DB::raw('DATE(created_at)'))
             ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(total_price) as total_sales'))
             ->pluck('total_sales', 'date');
 
-        // By Product Sales - Example by menu items (adjust this to suit your needs)
+        // By Product Sales (no change in logic)
         $productSales = Order::with('menu')
-            ->where('created_at', '>=', Carbon::now()->subDays(30))
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->get()
             ->groupBy('menu_id')
             ->map(fn($orders) => $orders->sum('total_price'))
             ->sortDesc();
 
-        return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales'));
+        return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterPeriod'));
+    }
+
+    public function getSalesData(Request $request)
+    {
+        $timePeriod = $request->input('time_period', 7);  // Default to 7 days if no value is provided
+
+        // Sales Data based on the selected time period
+        $salesData = Order::where('created_at', '>=', Carbon::now()->subDays($timePeriod))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(total_price) as total_sales'))
+            ->pluck('total_sales', 'date');
+
+        // By Product Sales - Adjust this as needed
+        $productSales = Order::with('menu')
+            ->where('created_at', '>=', Carbon::now()->subDays($timePeriod))
+            ->get()
+            ->groupBy('menu_id')
+            ->map(fn($orders) => $orders->sum('total_price'))
+            ->sortDesc();
+
+        return response()->json([
+            'salesData' => $salesData,
+            'productSales' => $productSales,
+        ]);
     }
 
     /**
