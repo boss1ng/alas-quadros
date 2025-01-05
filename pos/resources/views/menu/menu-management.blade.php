@@ -91,7 +91,7 @@
                 <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">&times;</button>
             </div>
 
-            <div class="mt-4">
+            <div class="mt-4 overflow-y-auto" style="max-height: 500px;">
                 <form id="menuForm" method="POST" action="{{ route('store') }}" enctype="multipart/form-data">
                     @csrf
 
