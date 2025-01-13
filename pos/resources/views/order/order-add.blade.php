@@ -20,13 +20,30 @@
                     <form id="orderForm" method="POST" action="{{ route('createOrder') }}">
                         @csrf
 
-                        <!-- Customer Name -->
-                        <div class="mb-4">
-                            <label for="customerName" class="block text-gray-700 font-semibold mb-2">Customer
-                                Name</label>
-                            <input type="text" name="customer_name" id="customerName" required
-                                class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
-                            @error('customer_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <div class="flex items-center justify-between mb-4">
+                            <!-- Customer Name -->
+                            <div class="flex-1 mr-5">
+                                <label for="customerName" class="block text-gray-700 font-semibold mb-2">Customer Name</label>
+                                <input type="text" name="customer_name" id="customerName" required
+                                    class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                                @error('customer_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Dine-in or Take-out -->
+                            <div class="flex-1 ml-5">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Order Type</label>
+                                    <div class="flex space-x-4">
+                                        <label>
+                                            <input type="radio" name="order_type" value="D/I" class="mr-2" required checked> Dine-In
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="order_type" value="T/O" class="mr-2"> Take-Out
+                                        </label>
+                                    </div>
+                                    @error('order_type') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Menu Items -->

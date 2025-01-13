@@ -43,6 +43,7 @@ class OrderController extends Controller
             'orders' => 'required|array',
             'total_price' => 'required|numeric',  // Ensure total_price is numeric
             'orders.*.quantity' => 'required|numeric|min:1',
+            'order_type' => 'required|string'
         ]);
 
         // Extract order details
@@ -61,6 +62,7 @@ class OrderController extends Controller
             'customer_name' => $request->input('customer_name'),
             'orders' => json_encode($orders), // Ensure the orders are stored as JSON
             'total_price' => $request->input('total_price'), // Store total price as numeric
+            'notes' => $request->input('order_type'),
         ]);
 
         // Redirect back with success message
