@@ -39,17 +39,20 @@ POS of Alas Quadros
 8. Right click the folder
 9. Open with Visual Studio
 10. Open the terminal by pressing Ctrl + J
-11. Enter the command `cd alas-quadros-pos`
+11. Enter the command `cd pos`
 12. Enter the command `composer install`
 
 # How to run the project
 
 1. Run the XAMPP control panel
 2. Start the Apache and MySQL
-3. Enter the command `cd alas-quadros-pos`
+3. Enter the command `cd pos`
 4. Enter the command `php artisan migrate`
 5. Enter the command `php artisan key:generate`
 6. Enter the command `php artisan serve`
+7. Hit Ctrl + Shift + ` to open a new terminal
+8. Enter the command `cd pos`
+9. Enter the command `npm run dev`
 
 # Project Features
 

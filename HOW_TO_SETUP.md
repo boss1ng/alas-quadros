@@ -13,7 +13,7 @@ POS of Alas Quadros
 7. You will see `INFO  Server running on [http://192.168.1.2:8000].`
 8. Hover over the address to make it underline
 9. `Ctrl + Click` to open
-10. Login as `admin` and `cook`
+10. Login as `admin`, `cook`, or `cashier`
 
 You can now open the POS in multiple devices. **Make sure they are all connected in the same internet.**
 
