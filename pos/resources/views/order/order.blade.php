@@ -29,7 +29,7 @@
                         <tr>
                             <th class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
-                                Customer Name
+                                Customer
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 colspan="2">
@@ -37,7 +37,7 @@
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
-                                Total Amount
+                                Total
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
