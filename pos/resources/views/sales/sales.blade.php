@@ -17,7 +17,30 @@
                         <option value="weekly" {{ request('filter')=='weekly' ? 'selected' : '' }}>Weekly</option>
                         <option value="monthly" {{ request('filter')=='monthly' ? 'selected' : '' }}>Monthly</option>
                         <option value="yearly" {{ request('filter')=='yearly' ? 'selected' : '' }}>Yearly</option>
+                        <option value="custom" {{ request('filter')=='custom' ? 'selected' : '' }}>Custom Date</option>
                     </select>
+                </div>
+
+                <!-- Custom Date Range Fields -->
+                <div id="custom-date-range" class="flex ml-5 items-center space-x-3" style="display: none;">
+                    <input type="date" id="start-date" name="start_date"
+                        class="bg-gray-200 text-gray-900 px-3 py-2 rounded dark:bg-gray-700 dark:text-gray-300"
+                        value="{{ request('start_date') }}">
+                    <span class="text-gray-500 dark:text-gray-300">to</span>
+                    <input type="date" id="end-date" name="end_date"
+                        class="bg-gray-200 text-gray-900 px-3 py-2 rounded dark:bg-gray-700 dark:text-gray-300"
+                        value="{{ request('end_date') }}">
+                </div>
+
+                <!-- Generate Report -->
+                <div class="ml-5">
+                    <a href="{{ route('sales.pdf', [
+                        'filter' => request('filter', '-'),
+                        'start_date' => request('filter') == 'custom' ? request('start_date') : null,
+                        'end_date' => request('filter') == 'custom' ? request('end_date') : null,
+                    ]) }}" class="bg-green-500 text-white px-4 py-3 rounded hover:bg-green-600">
+                        Generate Report
+                    </a>
                 </div>
             </div>
 
@@ -116,12 +139,46 @@
     </div>
 
     <script>
-        document.getElementById('filter').addEventListener('change', function () {
-            const filterValue = this.value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('filter', filterValue);
-            window.location.href = url.toString();
-        });
+        const filterDropdown = document.getElementById('filter');
+            const customDateRange = document.getElementById('custom-date-range');
+            const startDateInput = document.getElementById('start-date');
+            const endDateInput = document.getElementById('end-date');
+
+            // Toggle custom date range visibility based on selected filter
+            filterDropdown.addEventListener('change', function () {
+                const filterValue = this.value;
+
+                if (filterValue === 'custom') {
+                    customDateRange.style.display = 'flex';
+                } else {
+                    customDateRange.style.display = 'none';
+                }
+
+                // Update query parameters
+                const url = new URL(window.location.href);
+                url.searchParams.set('filter', filterValue);
+                if (filterValue !== 'custom') {
+                    url.searchParams.delete('start_date');
+                    url.searchParams.delete('end_date');
+                }
+                window.location.href = url.toString();
+            });
+
+            // Auto-submit when dates are selected
+            [startDateInput, endDateInput].forEach(input => {
+                input.addEventListener('change', () => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('filter', 'custom');
+                    url.searchParams.set('start_date', startDateInput.value);
+                    url.searchParams.set('end_date', endDateInput.value);
+                    window.location.href = url.toString();
+                });
+            });
+
+            // Show custom date range if already selected
+            if (filterDropdown.value === 'custom') {
+                customDateRange.style.display = 'flex';
+            }
     </script>
 
 </x-app-layout>

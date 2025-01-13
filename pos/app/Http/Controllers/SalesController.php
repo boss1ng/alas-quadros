@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class SalesController extends Controller
 {
@@ -58,6 +60,20 @@ class SalesController extends Controller
             case 'daily':
                 // Default filter: today
                 $ordersQuery->whereDate('created_at', today());
+                break;
+
+            case 'custom':
+                // Custom date range filter
+                $startDate = $request->input('start_date');
+                $endDate = $request->input('end_date');
+
+                // Ensure both dates are provided
+                if ($startDate && $endDate) {
+                    $ordersQuery->whereBetween('created_at', [
+                        Carbon::parse($startDate)->startOfDay(),
+                        Carbon::parse($endDate)->endOfDay()
+                    ]);
+                }
                 break;
 
             case '-':
@@ -122,5 +138,64 @@ class SalesController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportPdf(Request $request)
+    {
+        // Get filter value
+        $filter = $request->input('filter', '-');
+
+        // Fetch orders based on the filter
+        $orders = Order::query();
+
+        if ($filter !== '-') {
+            switch ($filter) {
+                case 'daily':
+                    $orders->whereDate('created_at', now());
+                    break;
+                case 'weekly':
+                    $orders->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
+                    break;
+                case 'monthly':
+                    $orders->whereMonth('created_at', now()->month);
+                    break;
+                case 'yearly':
+                    $orders->whereYear('created_at', now()->year);
+                    break;
+                case 'custom':
+                    $startDate = $request->input('start_date');
+                    $endDate = $request->input('end_date');
+                    if ($startDate && $endDate) {
+                        $orders->whereBetween('created_at', [
+                            Carbon::parse($startDate)->startOfDay(),
+                            Carbon::parse($endDate)->endOfDay()
+                        ]);
+                    }
+                    break;
+            }
+        }
+
+        $orders = $orders->get();
+        $totalSales = $orders->sum('total_price');
+        $menus = Menu::all(); // Fetch menus for mapping menu names
+
+        // Pass data to the PDF view
+        $pdf = Pdf::loadView('sales.pdf', compact('orders', 'totalSales', 'filter', 'menus'));
+
+        // Set the orientation to landscape
+        $pdf->setPaper('a4', 'landscape');
+
+        // Generate the filename with the current date in MMDDYYYY format
+        $currentDate = now()->format('mdY'); // e.g., 01132024
+        $filterOption = match ($filter) {
+            'custom' => "Custom_" . Carbon::parse($request->start_date)->format('mdY') . '-' . Carbon::parse($request->end_date)->format('mdY'),
+            '-' => 'All',
+            default => ucfirst($filter),
+        };
+
+        $filename = "Sales Report ({$filterOption}) v{$currentDate}.pdf";
+
+        // Download or stream the PDF
+        return $pdf->download($filename);
     }
 }

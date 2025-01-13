@@ -16,8 +16,10 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    // Dashboard
     Route::get('/dashboard/', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Order Management
     Route::get('/order/', [OrderController::class, 'index'])->name('order');
     Route::get('/order/new-order', [OrderController::class, 'orderForm'])->name('placeOrder');
     Route::post('/order/new-order/create', [OrderController::class, 'store'])->name('createOrder');
@@ -28,14 +30,19 @@ Route::middleware([
     Route::post('/order/update/{id}', [OrderController::class, 'update'])->name('updateOrder');
     Route::delete('/order/delete/{id}', [OrderController::class, 'destroy'])->name('deleteOrder');
 
+    // Sales
     Route::get('/sales/', [SalesController::class, 'index'])->name('sales');
+    // Report
+    Route::get('/sales/pdf', [SalesController::class, 'exportPdf'])->name('sales.pdf');
 
+    // Menu Management
     Route::get('/menu-management', [MenuController::class, 'index'])->name('menu-management');
     Route::post('/menu-management/create', [MenuController::class, 'createMenu'])->name('store');
     Route::delete('/menu-management/delete/{id}', [MenuController::class, 'deleteMenu'])->name('delete');
     Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
     Route::post('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
 
+    // User Management
     Route::get('/user-management', function () {
         return view('user-management');
     })->name('user-management');
