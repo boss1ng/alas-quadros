@@ -55,10 +55,12 @@
                                 rowspan="2">
                                 Notes
                             </th>
+                            @if (Auth::user()->role === "admin")
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
                                 Actions
                             </th>
+                            @endif
                         </tr>
                         <tr>
                             <th
@@ -111,6 +113,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
                                 {{ $order->notes }}
                             </td>
+                            @if (Auth::user()->role === "admin")
                             <td class="px-6 py-4 whitespace-nowrap text-md">
                                 <div class="flex items-center justify-center space-x-2">
                                     <a href="{{ route('editOrder', ['id' => $order->id]) }}"
@@ -129,6 +132,7 @@
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
