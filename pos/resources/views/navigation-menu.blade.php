@@ -12,25 +12,33 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+                    @if (Auth::user()->role === "admin")
+                        <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                        {{ __('Manage Orders') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                            {{ __('Manage Orders') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
-                        {{ __('Manage Menu') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
+                            {{ __('Manage Menu') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
-                        {{ __('Sales') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                            {{ __('Sales') }}
+                        </x-nav-link>
 
-                    <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
-                        {{ __('Manage Users') }}
-                    </x-nav-link>
+                        <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                            {{ __('Manage Users') }}
+                        </x-nav-link>
+
+                    @elseif (Auth::user()->role === "cook")
+                        <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                            {{ __('Manage Orders') }}
+                        </x-nav-link>
+
+                    @endif
                 </div>
             </div>
 
