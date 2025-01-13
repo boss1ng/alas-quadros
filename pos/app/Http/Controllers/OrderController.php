@@ -135,6 +135,7 @@ class OrderController extends Controller
             'orders.*.selected' => 'nullable|boolean',
             'orders.*.quantity' => 'required_with:orders.*.selected|numeric|min:1',
             'total_price' => 'required|numeric',
+            'order_type' => 'required|string'
         ]);
 
         // Process orders: filter selected items and prepare for JSON encoding
@@ -156,13 +157,14 @@ class OrderController extends Controller
             'customer_name' => $validatedData['customer_name'],
             'orders' => $processedOrdersJson,
             'total_price' => $validatedData['total_price'],
+            'notes' => $validatedData['order_type'],
         ];
 
         // Update the order with the new data
         $order->update($updatedData);
 
         // Redirect back to the Order page with a success message
-        return redirect()->route('order.order')->with('success', 'Order updated successfully!');
+        return redirect()->route('order')->with('success', 'Order updated successfully!');
     }
 
     /**
