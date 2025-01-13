@@ -1,12 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Order Form') }}
+            {{ __('Orders Management') }}
         </h2>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8"> <!-- max-w-7xl min-w-full -->
+        @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
+            <div class="min-w-full mx-auto sm:px-6 lg:px-8">
+
+        @elseif (Auth::user()->role === "cook")
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @endif
+
+        {{-- <div class="max-w-7xl mx-auto sm:px-6 lg:px-8"> --}}
             @if(session('success'))
             <div id="success-message" class="bg-green-500 text-white p-4 mb-4 rounded">
                 {{ session('success') }}
@@ -55,7 +62,7 @@
                                 rowspan="2">
                                 Notes
                             </th>
-                            @if (Auth::user()->role === "admin")
+                            @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
                                 Actions
@@ -113,7 +120,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
                                 {{ $order->notes }}
                             </td>
-                            @if (Auth::user()->role === "admin")
+                            @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
                             <td class="px-6 py-4 whitespace-nowrap text-md">
                                 <div class="flex items-center justify-center space-x-2">
                                     <a href="{{ route('editOrder', ['id' => $order->id]) }}"

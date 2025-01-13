@@ -33,7 +33,7 @@
                             {{ __('Manage Users') }}
                         </x-nav-link>
 
-                    @elseif (Auth::user()->role === "cook")
+                    @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
                         <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
                             {{ __('Manage Orders') }}
                         </x-nav-link>
