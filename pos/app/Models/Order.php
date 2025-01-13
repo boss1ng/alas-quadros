@@ -15,7 +15,8 @@ class Order extends Model
         'total_price',
         'isPaid',
         'isCooking',
-        'isServed'
+        'isServed',
+        'notes'
     ];
 
     protected $casts = [

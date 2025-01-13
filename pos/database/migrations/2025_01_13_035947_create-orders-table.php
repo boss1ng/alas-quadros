@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('isPaid')->default(false); // Set default to false or true
             $table->boolean('isCooking')->default(false);
             $table->boolean('isServed')->default(false);
+            $table->string('notes')->default('');
             $table->timestamps();
         });
     }
