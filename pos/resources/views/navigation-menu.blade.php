@@ -29,15 +29,14 @@
                             {{ __('Sales') }}
                         </x-nav-link>
 
-                        <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                        {{-- <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
                             {{ __('Manage Users') }}
-                        </x-nav-link>
+                        </x-nav-link> --}}
 
                     @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
                         <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
                             {{ __('Manage Orders') }}
                         </x-nav-link>
-
                     @endif
                 </div>
             </div>
@@ -163,25 +162,32 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()->role === "admin")
+                <x-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                {{ __('Manage Orders') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                    {{ __('Manage Orders') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
-                {{ __('Manage Menu') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('menu-management') }}" :active="request()->routeIs('menu-management')">
+                    {{ __('Manage Menu') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
-                {{ __('Sales') }}
-            </x-responsive-nav-link>
+                <x-responsive-nav-link href="{{ route('sales') }}" :active="request()->routeIs('sales')">
+                    {{ __('Sales') }}
+                </x-responsive-nav-link>
 
-            <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
-                {{ __('Manage Users') }}
-            </x-responsive-nav-link>
+                {{-- <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                    {{ __('Manage Users') }}
+                </x-responsive-nav-link> --}}
+
+            @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
+                <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                    {{ __('Manage Orders') }}
+                </x-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
