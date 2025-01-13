@@ -20,14 +20,33 @@
                     <form id="orderForm" method="POST" action="{{ route('updateOrder', ['id' => $order->id]) }}">
                         @csrf
 
-                        <!-- Customer Name -->
-                        <div class="mb-4">
-                            <label for="customerName" class="block text-gray-700 font-semibold mb-2">Customer
-                                Name</label>
-                            <input type="text" name="customer_name" id="customerName" required
-                                class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500"
-                                value="{{ old('customer_name', $order->customer_name) }}">
-                            @error('customer_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        <div class="flex items-center justify-between mb-4">
+                            <!-- Customer Name -->
+                            <div class="flex-1 mr-5">
+                                <label for="customerName" class="block text-gray-700 font-semibold mb-2">Customer Name</label>
+                                <input type="text" name="customer_name" id="customerName" required
+                                    class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500"
+                                    value="{{ old('customer_name', $order->customer_name) }}">
+                                @error('customer_name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Dine-in or Take-out -->
+                            <div class="flex-1 ml-5">
+                                <div>
+                                    <label class="block text-gray-700 font-semibold mb-2">Order Type</label>
+                                    <div class="flex space-x-4">
+                                        <label>
+                                            <input type="radio" name="order_type" value="D/I" class="mr-2" required {{ old('order_type',
+                                                $order->notes) == 'D/I' ? 'checked' : '' }}> Dine-In
+                                        </label>
+                                        <label>
+                                            <input type="radio" name="order_type" value="T/O" class="mr-2" {{ old('order_type', $order->notes)
+                                            == 'T/O' ? 'checked' : '' }}> Take-Out
+                                        </label>
+                                    </div>
+                                    @error('order_type') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Menu Items -->
@@ -104,15 +123,21 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const originalState = new Map();
+            const originalState = {
+                customerName: document.getElementById("customerName").value,
+                orderType: document.querySelector('input[name="order_type"]:checked')?.value,
+            };
 
-            // Save the original state
+            const saveButton = document.getElementById("saveButton");
+
+            // Save the original state for the menu items
+            const menuState = new Map();
             document.querySelectorAll('.card').forEach(card => {
                 const checkbox = card.querySelector('input[type="checkbox"]');
                 const quantityInput = card.querySelector('input[type="number"]');
-
                 const menuId = card.getAttribute('data-menu-id');
-                originalState.set(menuId, {
+
+                menuState.set(menuId, {
                     selected: checkbox.checked,
                     quantity: parseInt(quantityInput.value),
                 });
@@ -121,25 +146,31 @@
                 quantityInput.disabled = !checkbox.checked;
             });
 
+            // Add event listeners for the customer name and order type fields
+            const customerNameInput = document.getElementById("customerName");
+            customerNameInput.addEventListener("input", toggleSaveButton);
+
+            document.querySelectorAll('input[name="order_type"]').forEach(radio => {
+                radio.addEventListener("change", toggleSaveButton);
+            });
+
+            // Add event listeners for menu items
             document.querySelectorAll('.card').forEach(card => {
                 const checkbox = card.querySelector('input[type="checkbox"]');
                 const quantityInput = card.querySelector('input[type="number"]');
-                const menuId = card.getAttribute('data-menu-id');
 
-                checkbox.addEventListener('change', function () {
-                    // Enable/disable the quantity input based on the checkbox state
+                checkbox.addEventListener('change', () => {
                     quantityInput.disabled = !checkbox.checked;
 
-                    // Reset quantity to 1 if checkbox is checked and it was disabled before
                     if (checkbox.checked && quantityInput.disabled) {
-                        quantityInput.value = 1;
+                        quantityInput.value = 1; // Reset quantity to 1 if enabled
                     }
 
                     updateTotalPrice();
                     toggleSaveButton();
                 });
 
-                quantityInput.addEventListener('input', function () {
+                quantityInput.addEventListener('input', () => {
                     updateTotalPrice();
                     toggleSaveButton();
                 });
@@ -159,15 +190,23 @@
             }
 
             function toggleSaveButton() {
-                const saveButton = document.getElementById('saveButton');
                 let hasChanges = false;
 
+                // Check if the name or order type has changed
+                if (
+                    customerNameInput.value !== originalState.customerName ||
+                    document.querySelector('input[name="order_type"]:checked')?.value !== originalState.orderType
+                ) {
+                    hasChanges = true;
+                }
+
+                // Check if any menu item has changed
                 document.querySelectorAll('.card').forEach(card => {
                     const checkbox = card.querySelector('input[type="checkbox"]');
                     const quantityInput = card.querySelector('input[type="number"]');
                     const menuId = card.getAttribute('data-menu-id');
 
-                    const original = originalState.get(menuId);
+                    const original = menuState.get(menuId);
                     if (
                         checkbox.checked !== original.selected ||
                         (checkbox.checked && parseInt(quantityInput.value) !== original.quantity)
