@@ -53,6 +53,10 @@
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
+                                Notes
+                            </th>
+                            <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
+                                rowspan="2">
                                 Actions
                             </th>
                         </tr>
@@ -103,6 +107,9 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <input type="checkbox" {{ $order->isServed ? 'checked' : '' }} class="serving-checkbox" data-order-id="{{ $order->id }}"/>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                {{ $order->notes }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-md">
                                 <div class="flex items-center justify-center space-x-2">
