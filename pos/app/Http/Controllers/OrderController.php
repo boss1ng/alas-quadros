@@ -79,6 +79,24 @@ class OrderController extends Controller
         // return view('order-add', compact('menus'));
     }
 
+    public function updateCookingStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        // Update the cooking status based on the checkbox value
+        $order->isCooking = $request->input('isCooking');
+        $order->save();
+    }
+
+    public function updateServingStatus(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
+
+        // Update the serving status based on the checkbox value
+        $order->isServed = $request->input('isServed');
+        $order->save();
+    }
+
     /**
      * Display the specified resource.
      */

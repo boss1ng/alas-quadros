@@ -45,6 +45,14 @@
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
                                 rowspan="2">
+                                Cooking
+                            </th>
+                            <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
+                                rowspan="2">
+                                Served
+                            </th>
+                            <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
+                                rowspan="2">
                                 Actions
                             </th>
                         </tr>
@@ -89,6 +97,12 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <input type="checkbox" {{ $order->isPaid ? 'checked' : '' }} class="payment-checkbox" data-order-id="{{ $order->id }}"/>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" {{ $order->isCooking ? 'checked' : '' }} class="cooking-checkbox" data-order-id="{{ $order->id }}"/>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" {{ $order->isServed ? 'checked' : '' }} class="serving-checkbox" data-order-id="{{ $order->id }}"/>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-md">
                                 <div class="flex items-center justify-center space-x-2">
@@ -149,6 +163,44 @@
                     })
                 })
                 .then(response => console.log("Updated payment."))
+            });
+        });
+        document.querySelectorAll('.cooking-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const isChecked = this.checked;
+                const orderId = this.getAttribute('data-order-id');
+
+                // Send the AJAX request to update the payment status
+                fetch(`/order/update-cooking/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        isCooking: isChecked
+                    })
+                })
+                .then(response => console.log("Updated cooking status."))
+            });
+        });
+        document.querySelectorAll('.serving-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const isChecked = this.checked;
+                const orderId = this.getAttribute('data-order-id');
+
+                // Send the AJAX request to update the payment status
+                fetch(`/order/update-served/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        isServed: isChecked
+                    })
+                })
+                .then(response => console.log("Updated serving status."))
             });
         });
     </script>

@@ -13,7 +13,9 @@ class Order extends Model
         'customer_name',
         'orders',
         'total_price',
-        'isPaid'
+        'isPaid',
+        'isCooking',
+        'isServed'
     ];
 
     protected $casts = [
