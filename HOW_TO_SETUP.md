@@ -7,19 +7,14 @@ POS of Alas Quadros
 1. Run the XAMPP Control Panel
 2. Start the Apache and MySQL
 3. Open CMD
-4. Enter the command `ipconfig`
-5. Find `IPv4 Address. . . . . . . . . . . : 192.168.1.25`
-6. Copy the IPv4 Address (192.168.1.25)
-7. Open VSCode
-8. Find `vite.config.js`
-9. Paste the IPv4 Address to `host: '192.168.1.25'`
-10. Save the file (Ctrl + S)
-11. Open the terminal by clicking Ctrl + J
-12. Enter the command `cd pos`
-13. Enter the command `npm run dev --host=192.168.1.25 --port=5173`
-14. Hit Ctrl + Shift + ` to open a new terminal
-15. Enter the command `cd pos`
-16. php artisan serve --host=192.168.1.25 --port=8000
-17. Open `192.168.1.25` in multiple devices
+4. Enter the command `cd Desktop`
+5. Enter the command `cd alas-quadros\pos`
+6. Enter the command `npm run serve-dev-network`
+7. You will see `INFO  Server running on [http://192.168.1.2:8000].`
+8. Hover over the address to make it underline
+9. `Ctrl + Click` to open
+10. Login as `admin` and `cook`
+
+You can now open the POS in multiple devices. **Make sure they are all connected in the same internet.**
 
 GOODLUCK ALAS!
