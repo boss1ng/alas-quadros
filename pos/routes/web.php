@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SalesController;
@@ -44,9 +45,7 @@ Route::middleware([
     Route::post('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
 
     // Inventory Management
-    Route::get('/inventory-management', function () {
-        return view('inventory.inventory-management');
-    })->name('inventory-management');
+    Route::get('/inventory-management', [InventoryController::class, 'index'])->name('inventory-management');
 
     // User Management
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');

@@ -15,7 +15,7 @@
 
             <div class="flex items-center justify-end mb-4">
                 <!-- New User Button -->
-                {{-- <a class="bg-blue-500 text-white px-4 py-2 rounded">
+                {{-- <a href="{{ route('placeOrder') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
                     New User
                 </a> --}}
             </div>
