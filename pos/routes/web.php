@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\UserController;
 use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
 
@@ -48,7 +49,5 @@ Route::middleware([
     })->name('inventory-management');
 
     // User Management
-    Route::get('/user-management', function () {
-        return view('user.user-management');
-    })->name('user-management');
+    Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
 });
