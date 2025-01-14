@@ -6,7 +6,7 @@ POS of Alas Quadros
 
 1. Run the XAMPP Control Panel
 2. Start the Apache and MySQL
-3. Open CMD
+3. Search CMD and Open it
 4. Enter the command `cd Desktop`
 5. Enter the command `cd alas-quadros\pos`
 6. Enter the command `npm run serve-dev-network`
