@@ -49,6 +49,6 @@ Route::middleware([
 
     // User Management
     Route::get('/user-management', function () {
-        return view('user-management');
+        return view('user.user-management');
     })->name('user-management');
 });
