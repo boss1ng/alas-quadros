@@ -33,9 +33,9 @@
                             {{ __('Inventory') }}
                         </x-nav-link>
 
-                        {{-- <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                        <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
                             {{ __('Users') }}
-                        </x-nav-link> --}}
+                        </x-nav-link>
 
                     @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
                         <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
@@ -187,9 +187,9 @@
                     {{ __('Inventory') }}
                 </x-responsive-nav-link>
 
-                {{-- <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
+                <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
                     {{ __('Users') }}
-                </x-responsive-nav-link> --}}
+                </x-responsive-nav-link>
 
             @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
                 <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
