@@ -42,6 +42,11 @@ Route::middleware([
     Route::get('menu-management/edit/{id}', [MenuController::class, 'editMenu'])->name('edit');
     Route::post('menu-management/update/{id}', [MenuController::class, 'updateMenu'])->name('update');
 
+    // Inventory Management
+    Route::get('/inventory-management', function () {
+        return view('inventory.inventory-management');
+    })->name('inventory-management');
+
     // User Management
     Route::get('/user-management', function () {
         return view('user-management');
