@@ -101,8 +101,14 @@ class DiscountController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Discount $discount)
+    public function destroy($id)
     {
         //
+        $discount = Discount::findOrFail($id);
+
+        $discount->delete();
+
+        // Redirect back to the previous page
+        return back()->with('success', 'User deleted successfully!');
     }
 }
