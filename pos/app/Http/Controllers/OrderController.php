@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Discount;
 use App\Models\Menu;
 use App\Models\Order;
 use Illuminate\Http\Request;
@@ -21,7 +22,8 @@ class OrderController extends Controller
     public function orderForm()
     {
         $menus = Menu::all();
-        return view('order.order-add', compact('menus'));
+        $discounts = Discount::all();
+        return view('order.order-add', compact('menus', 'discounts'));
     }
 
     /**

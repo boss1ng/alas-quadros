@@ -22,7 +22,7 @@
 
                         <div class="flex items-center justify-between mb-4">
                             <!-- Customer Name -->
-                            <div class="flex-1 mr-5">
+                            <div class="flex-1">
                                 <label for="customerName" class="block text-gray-700 font-semibold mb-2">Customer Name</label>
                                 <input type="text" name="customer_name" id="customerName" required
                                     class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
@@ -30,7 +30,7 @@
                             </div>
 
                             <!-- Dine-in or Take-out -->
-                            <div class="flex-1 ml-5">
+                            <div class="flex-1 mx-5">
                                 <div>
                                     <label class="block text-gray-700 font-semibold mb-2">Order Type</label>
                                     <div class="flex space-x-4">
@@ -43,6 +43,18 @@
                                     </div>
                                     @error('order_type') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                                 </div>
+                            </div>
+
+                            <!-- Discounts -->
+                            <div class="flex-1">
+                                <label for="discount" class="block text-gray-700 font-semibold mb-2">Discount</label>
+                                <select name="discount" id="discount" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                                    <option value="">- None -</option>
+                                    @foreach($discounts as $discount)
+                                        <option value="{{$discount->discount}}">{{$discount->name}}</option>
+                                    @endforeach
+                                </select>
+                                @error('discount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
 
@@ -75,6 +87,29 @@
                                     placeholder="Qty" disabled>
                             </div>
                             @endforeach
+                        </div>
+
+                        {{-- <!-- Order List -->
+                        <div class="mb-4">
+                            <textarea type="text" id="orderList" name="orderList" readonly
+                                class="text-end w-full border-gray-300 rounded-lg bg-gray-100 focus:ring focus:ring-blue-500"></textarea>
+                        </div> --}}
+
+                        <!-- Order Breakdown Table -->
+                        <div class="mb-4">
+                            <label for="orderBreakdown" class="block text-gray-700 font-semibold mb-2">Order Breakdown</label>
+                            <table id="orderBreakdown" class="w-full border-collapse border border-gray-300 bg-gray-100 text-center">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 p-2">Item</th>
+                                        <th class="border border-gray-300 p-2">Quantity</th>
+                                        <th class="border border-gray-300 p-2">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows will be inserted here -->
+                                </tbody>
+                            </table>
                         </div>
 
                         <!-- Total Price -->
@@ -119,12 +154,14 @@
                 quantityInput.disabled = !checkbox.checked;
 
                 // Update the total price
-                updateTotalPrice();
+                // updateTotalPrice();
+                updateBreakdown();
             });
 
             quantityInput.addEventListener('input', function() {
                 // Update the total price when quantity changes
-                updateTotalPrice();
+                // updateTotalPrice();
+                updateBreakdown();
             });
         });
 
@@ -140,6 +177,62 @@
             });
 
             document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Send numeric value only
+        }
+
+        document.getElementById('discount').addEventListener('change', function () {
+        updateBreakdown(); // Call the function to recalculate and update the table
+        });
+
+        function updateBreakdown() {
+            const breakdownTableBody = document.querySelector('#orderBreakdown tbody');
+            breakdownTableBody.innerHTML = ''; // Clear the table body
+
+            let totalPriceWithoutDiscount = 0;
+
+            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+                const card = checkbox.closest('.card');
+                const itemName = card.querySelector('h4').innerText;
+                const price = parseFloat(card.querySelector('p').innerText.replace('PHP ', '').replace(',', ''));
+                const quantity = parseInt(card.querySelector('input[type="number"]').value) || 0;
+
+                const totalItemPrice = price * quantity;
+                totalPriceWithoutDiscount += totalItemPrice;
+
+                // Add row to the table for each selected item
+                const row = `
+                <tr>
+                    <td class="border border-gray-300 p-2">${itemName}</td>
+                    <td class="border border-gray-300 p-2">${quantity}</td>
+                    <td class="border border-gray-300 p-2">PHP ${totalItemPrice.toFixed(2)}</td>
+                </tr>
+                `;
+                breakdownTableBody.insertAdjacentHTML('beforeend', row);
+            });
+
+            // Calculate discount
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const discountAmount = totalPriceWithoutDiscount * (discount / 100);
+            const discountedTotalPrice = totalPriceWithoutDiscount - discountAmount;
+
+            // Add detailed total row to the table
+            const totalRow = `
+            <tr class="bg-gray-200 font-semibold">
+                <td colspan="2" class="border border-gray-300 p-2 text-right">Total Price:</td>
+                <td class="border border-gray-300 p-2">PHP ${totalPriceWithoutDiscount.toFixed(2)}</td>
+            </tr>
+            <tr class="bg-gray-100 font-semibold">
+                <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discount}%):</td>
+                <td class="border border-gray-300 p-2">- PHP ${discountAmount.toFixed(2)}</td>
+            </tr>
+            <tr class="bg-gray-200 font-bold">
+                <td colspan="2" class="border border-gray-300 p-2 text-right">Discounted Price:</td>
+                <td class="border border-gray-300 p-2">PHP ${discountedTotalPrice.toFixed(2)}</td>
+            </tr>
+            `;
+            breakdownTableBody.insertAdjacentHTML('beforeend', totalRow);
+
+            // Update the total price input
+            document.getElementById('totalPrice').value = discountedTotalPrice.toFixed(2);
         }
     </script>
 
