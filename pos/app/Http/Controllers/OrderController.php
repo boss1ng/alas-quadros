@@ -117,8 +117,9 @@ class OrderController extends Controller
         $menus = Menu::all();
         $order = Order::findOrFail($id);
         $orderItems = json_decode($order->orders, true); // Decode the JSON string into an array
+        $discounts = Discount::all();
 
-        return view('order.order-edit', compact('menus', 'order', 'orderItems'));
+        return view('order.order-edit', compact('menus', 'order', 'orderItems', 'discounts'));
     }
 
     /**
