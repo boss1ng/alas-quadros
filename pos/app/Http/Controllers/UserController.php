@@ -75,6 +75,8 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+        $user = User::findOrFail($id);
+        return view('user.user-edit', compact('user'));
     }
 
     /**
@@ -83,6 +85,28 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $user = User::findOrFail($id);
+
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'string',
+            'role' => 'required|string'
+        ]);
+
+        // Prepare data for update
+        $updatedData = [
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'role' => $validatedData['role'],
+        ];
+
+        // Update the order with the new data
+        $user->update($updatedData);
+
+        // Redirect back to the Order page with a success message
+        return redirect()->route('user-management')->with('success', 'User updated successfully!');
     }
 
     /**

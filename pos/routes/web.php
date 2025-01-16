@@ -51,6 +51,7 @@ Route::middleware([
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');
     Route::get('/user-management/new-user', [UserController::class, 'newUser'])->name('newUser');
     Route::post('/user-management/new-user/create', [UserController::class, 'store'])->name('createUser');
-
+    Route::get('/user-management/edit-user/{id}', [UserController::class, 'edit'])->name('editUser');
+    Route::post('/user-management/update/{id}', [UserController::class, 'update'])->name('updateUser');
     Route::delete('/user-management/delete/{id}', [UserController::class, 'destroy'])->name('deleteUser');
 });
