@@ -33,6 +33,10 @@
                             {{ __('Inventory') }}
                         </x-nav-link>
 
+                        <x-nav-link href="{{ route('discount') }}" :active="request()->routeIs('discount')">
+                            {{ __('Discounts') }}
+                        </x-nav-link>
+
                         <x-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">
                             {{ __('Users') }}
                         </x-nav-link>
@@ -185,6 +189,10 @@
 
                 <x-responsive-nav-link href="{{ route('inventory-management') }}" :active="request()->routeIs('inventory-management')">
                     {{ __('Inventory') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link href="{{ route('discount') }}" :active="request()->routeIs('discount')">
+                    {{ __('Discounts') }}
                 </x-responsive-nav-link>
 
                 <x-responsive-nav-link href="{{ route('user-management') }}" :active="request()->routeIs('user-management')">

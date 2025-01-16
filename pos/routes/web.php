@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
@@ -31,6 +32,14 @@ Route::middleware([
     Route::get('/order/edit/{id}', [OrderController::class, 'edit'])->name('editOrder');
     Route::post('/order/update/{id}', [OrderController::class, 'update'])->name('updateOrder');
     Route::delete('/order/delete/{id}', [OrderController::class, 'destroy'])->name('deleteOrder');
+
+    // Discount Management
+    Route::get('/discount', [DiscountController::class, 'index'])->name('discount');
+    Route::get('/discount/new-discount', [DiscountController::class, 'newDiscount'])->name('newDiscount');
+    Route::post('/discount/new-discount/create', [DiscountController::class, 'store'])->name('createDiscount');
+    Route::get('/discount/edit-discount/{id}', [DiscountController::class, 'edit'])->name('editDiscount');
+    Route::post('/discount/update/{id}', [DiscountController::class, 'update'])->name('updateDiscount');
+    Route::delete('/discount/delete/{id}', [DiscountController::class, 'destroy'])->name('deleteDiscount');
 
     // Sales
     Route::get('/sales/', [SalesController::class, 'index'])->name('sales');
