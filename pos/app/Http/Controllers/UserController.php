@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -15,6 +16,11 @@ class UserController extends Controller
     {
         $users = User::all();
         return view('user.user-management', compact('users'));
+    }
+
+    public function newUser()
+    {
+        return view('user.user-add');
     }
 
     /**
@@ -31,6 +37,27 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
+        // Validate the incoming request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'role' => 'required|string'
+        ]);
+
+        // Hash the password before storing it in the database
+        $hashedPassword = Hash::make($request->input('password'));
+
+        // Create the user
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $hashedPassword,
+            'role' => $request->input('role')
+        ]);
+
+        // Redirect back with success message
+        return redirect()->route('user-management')->with('success', 'User created successfully!');
     }
 
 
@@ -64,5 +91,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        $user = User::findOrFail($id);
+
+        $user->delete();
+
+        // Redirect back to the previous page
+        return back()->with('success', 'User deleted successfully!');
     }
 }

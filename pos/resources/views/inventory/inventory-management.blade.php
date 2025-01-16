@@ -26,31 +26,31 @@
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th
-                                class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-left text-lg font-large text-gray-500 dark:text-gray-300">
                                 FS Code
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Item Name
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Quantity
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Unit of Measurement
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Price per item
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Total
                             </th>
                             <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Actions
                             </th>
                         </tr>
