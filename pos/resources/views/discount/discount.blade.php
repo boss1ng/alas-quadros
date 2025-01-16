@@ -46,7 +46,7 @@
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $discount->discount }}
+                                {{ $discount->discount }}%
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
                                 <div class="flex items-center justify-center space-x-2">

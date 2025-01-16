@@ -17,6 +17,12 @@ class DiscountController extends Controller
         return view('discount.discount', compact('discounts'));
     }
 
+    public function newDiscount()
+    {
+        return view('discount.discount-add');
+    }
+
+
     /**
      * Show the form for creating a new resource.
      */
@@ -31,6 +37,20 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         //
+        // Validate the incoming request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'discount' => 'required|numeric',
+        ]);
+
+        // Create the discount
+        $discount = Discount::create([
+            'name' => $request->input('name'),
+            'discount' => $request->input('discount'),
+        ]);
+
+        // Redirect back with success message
+        return redirect()->route('discount')->with('success', 'Discount created successfully!');
     }
 
     /**
