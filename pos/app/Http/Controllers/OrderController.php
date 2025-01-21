@@ -42,6 +42,7 @@ class OrderController extends Controller
         // Validate the incoming request
         $request->validate([
             'customer_name' => 'required|string|max:255',
+            'discount' => 'required|integer',
             'orders' => 'required|array',
             'total_price' => 'required|numeric',  // Ensure total_price is numeric
             'orders.*.quantity' => 'required|numeric|min:1',
@@ -62,6 +63,7 @@ class OrderController extends Controller
         // Create the order
         $order = Order::create([
             'customer_name' => $request->input('customer_name'),
+            'discount' => $request->input('discount'),
             'orders' => json_encode($orders), // Ensure the orders are stored as JSON
             'total_price' => $request->input('total_price'), // Store total price as numeric
             'notes' => $request->input('order_type'),

@@ -51,7 +51,8 @@
                                 <select name="discount" id="discount" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                                     <option value="">- None -</option>
                                     @foreach($discounts as $discount)
-                                        <option value="{{$discount->discount}}">{{$discount->name}}</option>
+                                        {{-- <option value="{{$discount->discount}}">{{$discount->name}}</option> --}}
+                                        <option value="{{$discount->id}}">{{$discount->name}} ({{$discount->discount}}%)</option>
                                     @endforeach
                                 </select>
                                 @error('discount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
