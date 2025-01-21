@@ -51,8 +51,9 @@
                                 <select name="discount" id="discount" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                                     <option value="">- None -</option>
                                     @foreach($discounts as $discount)
-                                        {{-- <option value="{{$discount->discount}}">{{$discount->name}}</option> --}}
-                                        <option value="{{$discount->id}}">{{$discount->name}} ({{$discount->discount}}%)</option>
+                                    <option value="{{ $discount->id }}" data-discount="{{ $discount->discount }}">
+                                        {{ $discount->name }} ({{ $discount->discount }}%)
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('discount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -210,9 +211,12 @@
                 breakdownTableBody.insertAdjacentHTML('beforeend', row);
             });
 
-            // Calculate discount
-            const discount = parseFloat(document.getElementById('discount').value) || 0;
-            const discountAmount = totalPriceWithoutDiscount * (discount / 100);
+            // Get the selected discount percentage from the data-discount attribute
+            const discountSelect = document.getElementById('discount');
+            const selectedDiscount = discountSelect.options[discountSelect.selectedIndex];
+            const discountPercentage = parseFloat(selectedDiscount.getAttribute('data-discount')) || 0;
+
+            const discountAmount = totalPriceWithoutDiscount * (discountPercentage / 100);
             const discountedTotalPrice = totalPriceWithoutDiscount - discountAmount;
 
             // Add detailed total row to the table
@@ -222,7 +226,7 @@
                 <td class="border border-gray-300 p-2">PHP ${totalPriceWithoutDiscount.toFixed(2)}</td>
             </tr>
             <tr class="bg-gray-100 font-semibold">
-                <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discount}%):</td>
+                <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discountPercentage}%):</td>
                 <td class="border border-gray-300 p-2">- PHP ${discountAmount.toFixed(2)}</td>
             </tr>
             <tr class="bg-gray-200 font-bold">
