@@ -55,7 +55,9 @@
                                     class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                                     <option value="">- None -</option>
                                     @foreach($discounts as $discount)
-                                    <option value="{{$discount->discount}}">{{$discount->name}}</option>
+                                    <option value="{{ $discount->id }}" {{ old('discount', $order->discount) == $discount->id ? 'selected' : '' }}>
+                                        {{ $discount->name }} ({{ $discount->discount }}%)
+                                    </option>
                                     @endforeach
                                 </select>
                                 @error('discount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -98,6 +100,23 @@
                             @endforeach
                         </div>
 
+                        <!-- Order Breakdown Table -->
+                        {{-- <div class="mb-4">
+                            <label for="orderBreakdown" class="block text-gray-700 font-semibold mb-2">Order Breakdown</label>
+                            <table id="orderBreakdown" class="w-full border-collapse border border-gray-300 bg-gray-100 text-center">
+                                <thead>
+                                    <tr class="bg-gray-200">
+                                        <th class="border border-gray-300 p-2">Item</th>
+                                        <th class="border border-gray-300 p-2">Quantity</th>
+                                        <th class="border border-gray-300 p-2">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div> --}}
+
                         <!-- Total Price -->
                         <div class="mb-4">
                             <label for="totalPrice" class="block text-gray-700 font-semibold mb-2">Total Price</label>
@@ -139,9 +158,32 @@
             const originalState = {
                 customerName: document.getElementById("customerName").value,
                 orderType: document.querySelector('input[name="order_type"]:checked')?.value,
+                discount: document.getElementById("discount").value,  // Store the initial discount value
             };
 
             const saveButton = document.getElementById("saveButton");
+
+            /*
+            const orderItems = @json($orderItems); // Ensure this matches the PHP structure
+            const orderBreakdownTable = document.querySelector("#orderBreakdown tbody");
+
+            // Populate the order breakdown table initially
+            function populateOrderBreakdown() {
+                orderBreakdownTable.innerHTML = ''; // Clear any existing rows
+
+                orderItems.forEach(item => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td class="border border-gray-300 p-2">${item.name || 'Unknown Item'}</td>
+                        <td class="border border-gray-300 p-2">${item.quantity || 0}</td>
+                        <td class="border border-gray-300 p-2">PHP ${parseFloat(item.price || 0).toFixed(2)}</td>
+                    `;
+                    orderBreakdownTable.appendChild(row);
+                });
+            }
+
+            populateOrderBreakdown(); // Initial population
+            */
 
             // Save the original state for the menu items
             const menuState = new Map();
@@ -166,6 +208,10 @@
             document.querySelectorAll('input[name="order_type"]').forEach(radio => {
                 radio.addEventListener("change", toggleSaveButton);
             });
+
+            // Add event listener for discount field change
+            const discountSelect = document.getElementById("discount");
+            discountSelect.addEventListener("change", toggleSaveButton);  // Listen for discount changes
 
             // Add event listeners for menu items
             document.querySelectorAll('.card').forEach(card => {
@@ -205,10 +251,11 @@
             function toggleSaveButton() {
                 let hasChanges = false;
 
-                // Check if the name or order type has changed
+                // Check if the name, order type, or discount has changed
                 if (
                     customerNameInput.value !== originalState.customerName ||
-                    document.querySelector('input[name="order_type"]:checked')?.value !== originalState.orderType
+                    document.querySelector('input[name="order_type"]:checked')?.value !== originalState.orderType ||
+                    discountSelect.value !== originalState.discount  // Check if discount is changed
                 ) {
                     hasChanges = true;
                 }

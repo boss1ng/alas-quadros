@@ -124,6 +124,28 @@ class OrderController extends Controller
         return view('order.order-edit', compact('menus', 'order', 'orderItems', 'discounts'));
     }
 
+    /* public function edit($id)
+    {
+        $menus = Menu::all()->keyBy('id'); // Fetch menus and key by 'id'
+        $order = Order::findOrFail($id);
+        $orderItems = json_decode($order->orders, true); // Decode the orders JSON string into an array
+        $discounts = Discount::all();
+
+        // Add menu details (name and price) to each order item
+        foreach ($orderItems as &$item) {
+            $menu = $menus->get($item['menu_id']); // Get menu by menu_id
+            if ($menu) {
+                $item['name'] = $menu->name; // Add name
+                $item['price'] = $menu->price; // Add price
+            } else {
+                $item['name'] = 'Unknown Item'; // Default name if not found
+                $item['price'] = 0; // Default price if not found
+            }
+        }
+
+        return view('order.order-edit', compact('menus', 'order', 'orderItems', 'discounts'));
+    } */
+
     /**
      * Update the specified resource in storage.
      */
