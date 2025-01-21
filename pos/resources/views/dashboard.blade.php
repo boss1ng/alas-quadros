@@ -6,7 +6,13 @@
     </x-slot>
 
     <div class="py-12">
+        @if (Auth::user()->role === "admin")
+        <div class="min-w-full mx-auto sm:px-6 lg:px-8">
+
+        @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @endif
+
             <div
                 class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
