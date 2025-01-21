@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('customer_name');
             $table->json('orders'); // JSON column to store ordered items (menu_id and quantity)
+            $table->integer('discount');
             $table->decimal('total_price', 10, 2);
             $table->boolean('isPaid')->default(false); // Set default to false or true
             $table->boolean('isCooking')->default(false);
