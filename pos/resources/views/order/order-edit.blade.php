@@ -55,7 +55,7 @@
                                     class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                                     <option value="">- None -</option>
                                     @foreach($discounts as $discount)
-                                    <option value="{{ $discount->id }}" {{ old('discount', $order->discount) == $discount->id ? 'selected' : '' }}>
+                                    <option value="{{ $discount->id }}" {{ old('discount', $order->discount) == $discount->id ? 'selected' : '' }} data-discount="{{ $discount->discount }}">
                                         {{ $discount->name }} ({{ $discount->discount }}%)
                                     </option>
                                     @endforeach
@@ -180,6 +180,31 @@
                     `;
                     orderBreakdownTable.appendChild(row);
                 });
+
+                // Calculate discount
+                const discount = parseFloat(document.getElementById('discount').value) || 0;
+                const discountAmount = totalPriceWithoutDiscount * (discount / 100);
+                const discountedTotalPrice = totalPriceWithoutDiscount - discountAmount;
+
+                // Add detailed total row to the table
+                const totalRow = `
+                <tr class="bg-gray-200 font-semibold">
+                    <td colspan="2" class="border border-gray-300 p-2 text-right">Total Price:</td>
+                    <td class="border border-gray-300 p-2">PHP ${totalPriceWithoutDiscount.toFixed(2)}</td>
+                </tr>
+                <tr class="bg-gray-100 font-semibold">
+                    <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discount}%):</td>
+                    <td class="border border-gray-300 p-2">- PHP ${discountAmount.toFixed(2)}</td>
+                </tr>
+                <tr class="bg-gray-200 font-bold">
+                    <td colspan="2" class="border border-gray-300 p-2 text-right">Discounted Price:</td>
+                    <td class="border border-gray-300 p-2">PHP ${discountedTotalPrice.toFixed(2)}</td>
+                </tr>
+                `;
+                orderBreakdownTable.appendChild(totalRow);
+
+                // Update the total price input
+                document.getElementById('totalPrice').value = discountedTotalPrice.toFixed(2);
             }
 
             populateOrderBreakdown(); // Initial population
