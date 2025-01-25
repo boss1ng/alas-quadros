@@ -103,9 +103,9 @@
                                 @php
                                 $menu = $menus->firstWhere('id', $item->menu_id);
                                 @endphp
-                                    @if (Auth::user()->role === "admin")
+                                    @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
                                         <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
-                                    @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
+                                    @elseif (Auth::user()->role === "cook")
                                         @if ($menu !== null)
                                             <div>{{ $menu->acronym ? $menu->acronym : $menu->name }}</div>
                                         @else
