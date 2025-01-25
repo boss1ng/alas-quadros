@@ -95,7 +95,15 @@
                                 @php
                                 $menu = $menus->firstWhere('id', $item->menu_id);
                                 @endphp
-                                <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
+                                    @if (Auth::user()->role === "admin")
+                                        <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
+                                    @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
+                                        @if ($menu !== null)
+                                            <div>{{ $menu->acronym ? $menu->acronym : $menu->name }}</div>
+                                        @else
+                                            <div>Menu not found</div>
+                                        @endif
+                                    @endif
                                 @endforeach
                             </td>
                             <td
