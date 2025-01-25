@@ -62,7 +62,7 @@
                                 Total Amount
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
-                                rowspan="2">
+                                colspan="2">
                                 Paid
                             </th>
                         </tr>
@@ -74,6 +74,14 @@
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
                                 Quantity
+                            </th>
+                            <th
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                Cash
+                            </th>
+                            <th
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                GCash
                             </th>
                         </tr>
                     </thead>
@@ -106,7 +114,11 @@
                                     PHP {{ number_format($order->total_price, 2) }}
                                 </td>
                                 <td class="px-6 py-4 text-center">
-                                    <input type="checkbox" {{ $order->isPaid ? 'checked' : '' }} class="payment-checkbox"
+                                    <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="payment-checkbox"
+                                    data-order-id="{{ $order->id }}" disabled readonly/>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="payment-checkbox"
                                     data-order-id="{{ $order->id }}" disabled readonly/>
                                 </td>
                             </tr>
@@ -124,6 +136,7 @@
                                 <td colspan="1" class="px-6 py-4 text-center text-lg font-semibold text-gray-600 dark:text-white">
                                     PHP {{ number_format($totalSales, 2) }}
                                 </td>
+                                <td class="px-6 py-4 text-center"></td>
                                 <td class="px-6 py-4 text-center"></td>
                             </tr>
                         </tfoot>
