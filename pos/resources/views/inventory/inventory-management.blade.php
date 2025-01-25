@@ -14,10 +14,10 @@
             @endif
 
             <div class="flex items-center justify-end mb-4">
-                <!-- New Item Button -->
-                {{-- <a href="{{ route('newItem') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
-                    New Item
-                </a> --}}
+                <!-- In/Out Item Button -->
+                <a href="{{ route('inventoryForm') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    In / Out
+                </a>
             </div>
 
             <!-- Sales Table -->
@@ -25,10 +25,6 @@
                 <table class="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
-                            <th
-                                class="px-6 py-3 text-left text-lg font-large text-gray-500 dark:text-gray-300">
-                                FS Code
-                            </th>
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Item Name
@@ -43,12 +39,16 @@
                             </th>
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
+                                Quantity per Box
+                            </th>
+                            {{-- <th
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Price per item
                             </th>
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Total
-                            </th>
+                            </th> --}}
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Actions
@@ -59,10 +59,6 @@
                         @foreach($inventories as $inventory)
                         <tr
                             class="border-t text-center border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td
-                                class="text-left px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $inventory->fscode }}
-                            </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
                                 {{ $inventory->itemName }}
@@ -77,11 +73,7 @@
                             </td>
                             <td
                                 class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                PHP {{ number_format($inventory->pricePerItem, 2) }}
-                            </td>
-                            <td
-                                class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                PHP {{ number_format($inventory->total, 2) }}
+                                {{ $inventory->quantityPerPackage ? $inventory->quantityPerPackage . ' pieces' : '---' }}
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">

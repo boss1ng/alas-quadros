@@ -56,6 +56,9 @@ Route::middleware([
 
     // Inventory Management
     Route::get('/inventory-management', [InventoryController::class, 'index'])->name('inventory-management');
+    Route::post('/inventory-management/inventory-form', [InventoryController::class, 'inventoryForm'])->name('inventoryForm');
+    Route::post('/inventory-management/inventory-form/in', [InventoryController::class, 'in'])->name('inventoryIn');
+    Route::post('/inventory-management/inventory-form/out', [InventoryController::class, 'out'])->name('inventoryOut');
 
     // User Management
     Route::get('/user-management', [UserController::class, 'index'])->name('user-management');

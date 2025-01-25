@@ -12,30 +12,55 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
-
         // Create dummy data for testing
-        $inventories = collect([
+        $dummyInventory = collect([
             [
-                'fscode' => 'FS001',
-                'itemName' => 'Laptop',
-                'quantity' => 10,
-                'unitOfMeasurement' => 'pieces',
+                'itemName' => 'Mayonnaise',
+                'quantity' => 5,
+                'unitOfMeasurement' => 'boxes',
+                'quantityPerPackage' => 6,
                 'pricePerItem' => 750.00,
                 'total' => 7500.00,
             ],
             [
-                'fscode' => 'FS002',
-                'itemName' => 'Office Chair',
-                'quantity' => 15,
+                'itemName' => 'Buns',
+                'quantity' => 20,
                 'unitOfMeasurement' => 'pieces',
+                'quantityPerPackage' => null,
+                'pricePerItem' => 120.00,
+                'total' => 1800.00,
+            ],
+            [
+                'itemName' => 'Sibuyas',
+                'quantity' => 5,
+                'unitOfMeasurement' => 'kilo',
+                'quantityPerPackage' => null,
                 'pricePerItem' => 120.00,
                 'total' => 1800.00,
             ],
         ])->map(fn($inventory) => (object) $inventory);
 
-        // $inventories = Inventory::all();
+        $inventories = Inventory::all();
         return view('inventory.inventory-management', compact('inventories'));
+    }
+
+    public function inventoryForm()
+    {
+        return view('inventory.inventory-add');
+    }
+
+    public function in()
+    {
+
+
+        return redirect()->route('inventory-management')->with('success', 'Item In successfully!');
+    }
+
+    public function out()
+    {
+
+
+        return redirect()->route('inventory-management')->with('success', 'Item Out successfully!');
     }
 
     /**
