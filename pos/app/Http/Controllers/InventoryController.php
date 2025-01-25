@@ -54,6 +54,7 @@ class InventoryController extends Controller
         // Validation logic for name, description, price, and image
         $request->validate([
             'itemName' => 'required|string|max:255',
+            'category' => 'nullable|string|max:50',
             'quantity' => 'required|numeric',
             'unitOfMeasurement' => 'required|string',
             'quantityPerPackage' => 'nullable|numeric',
@@ -71,14 +72,18 @@ class InventoryController extends Controller
                     // 'quantityPerPackage' => $inventory->quantityPerPackage + ($request->quantityPerPackage ?? 0),
                 ]);
             } else {
+                // Check if category has a value
+                $categoryRequest = $request->category ? $request->category : null;
+
                 // Check if quantityPerPackage has a value
-                $quantityPerPackage = $request->quantityPerPackage ? $request->quantityPerPackage : null;
+                $quantityPerPackageRequest = $request->quantityPerPackage ? $request->quantityPerPackage : null;
 
                 Inventory::create([
                     'itemName' => $request->itemName,
+                    'category' => $categoryRequest,
                     'quantity' => $request->quantity,
                     'unitOfMeasurement' => $request->unitOfMeasurement,
-                    'quantityPerPackage' => $quantityPerPackage,
+                    'quantityPerPackage' => $quantityPerPackageRequest,
                 ]);
             }
 

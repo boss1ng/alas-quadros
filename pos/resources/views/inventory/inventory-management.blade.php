@@ -115,7 +115,8 @@
                     <!-- Item Name Field -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Item Name</label>
-                        <select id="itemName" name="itemName" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500" onchange="toggleCustomInput()">
+                        <select id="itemName" name="itemName" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500"
+                            onchange="toggleCustomInput()">
                             <option value="" disabled selected>Select an item</option>
                             <option value="Mayonnaise">Mayonnaise</option>
                             <option value="Chicken">Chicken</option>
@@ -131,6 +132,18 @@
                         </div>
 
                         @error('itemName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Category Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Category</label>
+                        <select name="category" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="Spices">Spices</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        @error('category') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Quantity Field -->
@@ -190,13 +203,16 @@
         function toggleCustomInput() {
             var select = document.getElementById("itemName");
             var customItemNameDiv = document.getElementById("customItemNameDiv");
+            var customItemNameInput = document.getElementById("customItemName");
 
             if (select.value === "Custom") {
                 customItemNameDiv.classList.remove("hidden");
-                select.name = ""; // Remove the name from select to avoid sending it when Custom is selected
+                select.removeAttribute("name"); // Remove the name from select when Custom is selected
+                customItemNameInput.setAttribute("name", "itemName"); // Set name for the custom input
             } else {
                 customItemNameDiv.classList.add("hidden");
-                select.name = "itemName"; // Reassign name to the select when not Custom
+                select.setAttribute("name", "itemName"); // Restore the name to select
+                customItemNameInput.removeAttribute("name"); // Remove name from custom input
             }
         }
 

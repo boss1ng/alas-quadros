@@ -13,6 +13,7 @@ class Inventory extends Model
     // Define fillable fields to allow mass assignment
     protected $fillable = [
         'itemName',
+        'category',
         'quantity',
         'unitOfMeasurement',
         'quantityPerPackage',
