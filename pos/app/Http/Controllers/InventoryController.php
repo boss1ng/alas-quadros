@@ -40,7 +40,16 @@ class InventoryController extends Controller
             ],
         ])->map(fn($inventory) => (object) $inventory);
 
-        $inventories = Inventory::all();
+        // $inventories = Inventory::all();
+        // $inventories = Inventory::all()->groupBy('category')->sortKeys();
+
+        $inventories = Inventory::all()->map(function ($inventory) {
+            // If category is NULL, set a placeholder value for sorting purposes
+            $inventory->category = $inventory->category ?? 'zzz';
+            return $inventory;
+        })->groupBy('category')->sortKeys();
+
+
         return view('inventory.inventory-management', compact('inventories'));
     }
 
@@ -56,7 +65,7 @@ class InventoryController extends Controller
             'itemName' => 'required|string|max:255',
             'category' => 'nullable|string|max:50',
             'quantity' => 'required|numeric',
-            'unitOfMeasurement' => 'required|string',
+            'unitOfMeasurement' => 'nullable|string',
             'quantityPerPackage' => 'nullable|numeric',
         ]);
 

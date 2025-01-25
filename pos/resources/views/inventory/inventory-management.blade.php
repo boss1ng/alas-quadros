@@ -27,76 +27,82 @@
                 </button>
             </div>
 
-            <!-- Inventory Table -->
-            <div class="mt-4 overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                    <thead class="bg-gray-100 dark:bg-gray-700">
-                        <tr>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Item Name
-                            </th>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Quantity
-                            </th>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Unit of Measurement
-                            </th>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Quantity per Box
-                            </th>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($inventories as $inventory)
-                        <tr
-                            class="border-t text-center border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $inventory->itemName }}
-                            </td>
-                            <td
-                                class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $inventory->quantity }}
-                                @if($inventory->quantity <= 2)
-                                    <p class="text-red-500">!NOTICE</p>
-                                @endif
-                            </td>
-                            <td
-                                class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $inventory->unitOfMeasurement }}
-                            </td>
-                            <td
-                                class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $inventory->quantityPerPackage ? $inventory->quantityPerPackage . ' pieces' : '---' }}
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                <div class="flex items-center justify-center space-x-2">
-                                    <form action="{{ route('deleteItem', ['id' => $inventory->id]) }}" method="POST"
-                                        class="inline-block"
-                                        onsubmit="return confirm('Are you sure you want to delete this item?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            @foreach($inventories as $category => $items)
+            <!-- Category Table -->
+            <div class="mt-4">
+                <h2 class="text-2xl font-semibold mb-4 text-black dark:text-white">{{ $category === 'zzz' ? 'Others' : $category }}</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                        <thead class="bg-gray-100 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Item Name</th>
+
+                                {{-- @if ($category !== 'zzz')
+                                    <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Category</th>
+                                @endif --}}
+
+                                {{-- <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Category</th> --}}
+
+                                <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Quantity</th>
+                                <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Unit of
+                                    Measurement</th>
+                                <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Quantity per
+                                    Box</th>
+                                <th class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($items as $inventory)
+                            <tr
+                                class="border-t text-center border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{$inventory->itemName }}
+                                </td>
+
+                                {{-- @if ($category !== 'zzz')
+                                    <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                        {{$inventory->category }}
+                                    </td>
+                                @endif --}}
+
+                                {{-- <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{$inventory->category === 'zzz' ? '' : $inventory->category }}
+                                </td> --}}
+
+                                <td
+                                    class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $inventory->quantity }}
+                                    @if($inventory->quantity <= 2) <p class="text-red-500">!NOTICE</p>
+                                        @endif
+                                </td>
+                                <td
+                                    class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $inventory->unitOfMeasurement }}</td>
+                                <td
+                                    class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $inventory->quantityPerPackage ? $inventory->quantityPerPackage . ' pieces' : '---' }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <form action="{{ route('deleteItem', ['id' => $inventory->id]) }}" method="POST"
+                                            class="inline-block"
+                                            onsubmit="return confirm('Are you sure you want to delete this item?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            @endforeach
         </div>
     </div>
 
@@ -135,7 +141,7 @@
                     </div>
 
                     <!-- Category Field -->
-                    <div class="mb-4">
+                    <div class="mb-4" id="category">
                         <label class="block text-gray-700 font-semibold mb-2">Category</label>
                         <select name="category" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                             <option value="" disabled selected>Select a category</option>
@@ -155,7 +161,7 @@
                     </div>
 
                     <!-- Unit of Measurement Field -->
-                    <div class="mb-4">
+                    <div class="mb-4" id="unitOfMeasurement">
                         <label class="block text-gray-700 font-semibold mb-2">Unit of Measurement</label>
                         <select name="unitOfMeasurement" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                             <option value="" disabled selected>Select an item</option>
@@ -230,12 +236,16 @@
         const inventoryForm = document.getElementById('inventoryForm');
         const actionTypeInput = document.getElementById('actionType');
         const quantityPerPackage = document.getElementById("quantityPerPackage");
+        const category = document.getElementById("category");
+        const unitOfMeasurement = document.getElementById("unitOfMeasurement");
 
         // Open IN modal
         openInModalBtn.addEventListener('click', () => {
             inventoryModal.classList.remove('hidden');
             modalTitle.innerText = 'Inventory Form';
             quantityPerPackage.style.display = "block"; // Show field
+            category.style.display = "block"; // Show field
+            unitOfMeasurement.style.display = "block"; // Show field
             inBtn.style.display = "block"; // Show button
             outBtn.style.display = "none"; // Hide button
         });
@@ -245,6 +255,8 @@
             inventoryModal.classList.remove('hidden');
             modalTitle.innerText = 'Inventory Form';
             quantityPerPackage.style.display = "none"; // Hide field
+            category.style.display = "none"; // Hide field
+            unitOfMeasurement.style.display = "none"; // Hide field
             inBtn.style.display = "none"; // Show button
             outBtn.style.display = "block"; // Hide button
         });
