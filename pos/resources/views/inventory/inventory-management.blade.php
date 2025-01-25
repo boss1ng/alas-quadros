@@ -19,8 +19,11 @@
 
             <div class="flex items-center justify-end mb-4">
                 <!-- In/Out Item Button -->
-                <button id="openModalBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
-                    In / Out
+                <button id="openInModalBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
+                    In
+                </button>
+                <button id="openOutModalBtn" class="bg-red-500 text-white px-4 py-2 rounded">
+                    Out
                 </button>
             </div>
 
@@ -158,7 +161,7 @@
                     </div>
 
                     <!-- Quantity per Box Field -->
-                    <div class="mb-4">
+                    <div class="mb-4" id="quantityPerPackage">
                         <label class="block text-gray-700 font-semibold mb-2">Quantity per Box</label>
                         <input type="number" name="quantityPerPackage"
                             class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
@@ -172,8 +175,8 @@
 
             <div class="mt-6 flex justify-end space-x-2">
                 <button id="cancelBtn" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400">Cancel</button>
-                <button id="inBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">In</button>
-                <button id="outBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Out</button>
+                <button id="inBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" style="display: none">In</button>
+                <button id="outBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"style="display: none">Out</button>
             </div>
         </div>
     </div>
@@ -193,43 +196,76 @@
     <script>
         // Get elements
         const inventoryModal = document.getElementById('inventoryModal');
-        const openModalBtn = document.getElementById('openModalBtn');
+        // const openModalBtn = document.getElementById('openModalBtn');
+
+        const openInModalBtn = document.getElementById("openInModalBtn");
+        const openOutModalBtn = document.getElementById("openOutModalBtn");
+
         const closeModalBtn = document.getElementById('closeModalBtn');
         const cancelBtn = document.getElementById('cancelBtn');
         const inBtn = document.getElementById('inBtn');
+        const outBtn = document.getElementById('outBtn');
         const modalTitle = document.getElementById('modalTitle');
         const inventoryForm = document.getElementById('inventoryForm');
         const actionTypeInput = document.getElementById('actionType');
+        const quantityPerPackage = document.getElementById("quantityPerPackage");
 
-        // Open modal
-        openModalBtn.addEventListener('click', () => {
+        // Open IN modal
+        openInModalBtn.addEventListener('click', () => {
             inventoryModal.classList.remove('hidden');
             modalTitle.innerText = 'Inventory Form';
+            quantityPerPackage.style.display = "block"; // Show field
+            inBtn.style.display = "block"; // Show button
+            outBtn.style.display = "none"; // Hide button
+        });
+
+        // Open OUT modal
+        openOutModalBtn.addEventListener('click', () => {
+            inventoryModal.classList.remove('hidden');
+            modalTitle.innerText = 'Inventory Form';
+            quantityPerPackage.style.display = "none"; // Hide field
+            inBtn.style.display = "none"; // Show button
+            outBtn.style.display = "block"; // Hide button
         });
 
         // Close modal
         closeModalBtn.addEventListener('click', () => {
             inventoryModal.classList.add('hidden');
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
         });
 
         cancelBtn.addEventListener('click', () => {
             inventoryModal.classList.add('hidden');
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
         });
 
         // Handle "In" button click
         inBtn.addEventListener('click', () => {
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
             actionTypeInput.value = 'in'; // Set the action type to "in"
             inventoryForm.submit(); // Submit the form
         });
 
         // Handle "Out" button click
         outBtn.addEventListener('click', () => {
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
             actionTypeInput.value = 'out'; // Set the action type to "out"
             inventoryForm.submit(); // Submit the form
         });
 
         // Inventory Form
         inBtn.addEventListener('click', () => {
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
+            inventoryForm.submit(); // Trigger form submission (or implement your own AJAX logic)
+        });
+        outBtn.addEventListener('click', () => {
+            inBtn.style.display = "none";
+            outBtn.style.display = "none";
             inventoryForm.submit(); // Trigger form submission (or implement your own AJAX logic)
         });
     </script>

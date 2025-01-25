@@ -68,7 +68,7 @@ class InventoryController extends Controller
             if ($inventory) {
                 $inventory->update([
                     'quantity' => $inventory->quantity + $request->quantity,
-                    'quantityPerPackage' => $inventory->quantityPerPackage + ($request->quantityPerPackage ?? 0),
+                    // 'quantityPerPackage' => $inventory->quantityPerPackage + ($request->quantityPerPackage ?? 0),
                 ]);
             } else {
                 Inventory::create([
@@ -90,7 +90,7 @@ class InventoryController extends Controller
 
                 $inventory->update([
                     'quantity' => $newQuantity,
-                    'quantityPerPackage' => max(0, $inventory->quantityPerPackage - ($request->quantityPerPackage ?? 0)),
+                    // 'quantityPerPackage' => max(0, $inventory->quantityPerPackage - ($request->quantityPerPackage ?? 0)),
                 ]);
             } else {
                 return redirect()->route('inventory-management')->with('error', 'Item not existing');
