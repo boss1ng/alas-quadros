@@ -73,6 +73,9 @@
                             <td
                                 class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
                                 {{ $inventory->quantity }}
+                                @if($inventory->quantity <= 2)
+                                    <p class="text-red-500">!NOTICE</p>
+                                @endif
                             </td>
                             <td
                                 class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
