@@ -31,6 +31,14 @@
                             @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
 
+                        <!-- Acronym Field -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">Menu Acronym</label>
+                            <input type="text" name="acronym" id="menuAcronym" value="{{ old('acronym', $menu->acronym) }}"
+                                class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                            @error('acronym') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
                         <!-- Description Field -->
                         <div class="mb-4">
                             <label class="block text-gray-700 font-semibold mb-2">Description</label>
@@ -98,6 +106,7 @@
 
         const initialData = {
             name: "{{ old('name', $menu->name) }}",
+            acronym: "{{ old('acronym', $menu->acronym) }}",
             description: "{{ old('description', $menu->description) }}",
             price: "{{ old('price', $menu->price) }}",
             image: currentImageName
@@ -105,6 +114,7 @@
 
         const checkChanges = () => {
             const nameChanged = document.getElementById('menuName').value !== initialData.name;
+            const acronymChanged = document.getElementById('menuAcronym').value !== initialData.acronym;
             const descriptionChanged = document.getElementById('menuDescription').value !== initialData.description;
             const priceChanged = document.getElementById('menuPrice').value !== initialData.price;
             const imageChanged = document.getElementById('menuImage').files.length > 0;
@@ -114,7 +124,7 @@
             const imageFileChanged = newImageFile && newImageFile.name !== initialData.image;
 
             // Enable or disable the Save button based on changes
-            if (nameChanged || descriptionChanged || priceChanged || imageFileChanged) {
+            if (nameChanged || acronymChanged || descriptionChanged || priceChanged || imageFileChanged) {
                 saveBtn.disabled = false;
             } else {
                 saveBtn.disabled = true;
@@ -126,6 +136,7 @@
 
         // Listen for input changes to check for updates
         document.getElementById('menuName').addEventListener('input', checkChanges);
+        document.getElementById('menuAcronym').addEventListener('input', checkChanges);
         document.getElementById('menuDescription').addEventListener('input', checkChanges);
         document.getElementById('menuPrice').addEventListener('input', checkChanges);
         document.getElementById('menuImage').addEventListener('change', checkChanges);

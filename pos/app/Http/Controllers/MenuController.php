@@ -19,6 +19,7 @@ class MenuController extends Controller
         // Validation logic for name, description, price, and image
         $request->validate([
             'name' => 'required|string|max:255',
+            'acronym' => 'nullable|string',
             'description' => 'nullable|string',
             'price' => 'required|numeric',
             'image' => 'nullable|image|max:1024', // Max 1MB image
@@ -31,6 +32,7 @@ class MenuController extends Controller
 
         Menu::create([
             'name' => $request->name,
+            'acronym' => $request->acronym,
             'description' => $request->description,
             'price' => $request->price,
             'image' => $imagePath ?? null,

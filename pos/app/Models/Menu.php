@@ -15,6 +15,7 @@ class Menu extends Model
     // Define fillable fields to allow mass assignment
     protected $fillable = [
         'name',
+        'acronym',
         'description',
         'price',
         'image',

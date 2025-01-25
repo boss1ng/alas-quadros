@@ -26,6 +26,7 @@
                     <thead class="bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300">Name</th>
+                            <th class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300">Acronym</th>
                             <th class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300">
                                 Description</th>
                             <th class="px-6 py-3 text-left text-lg font-large text-gray-500 uppercase dark:text-gray-300">Price
@@ -41,6 +42,8 @@
                         <tr class="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">{{
                                 $menu->name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">{{
+                                $menu->acronym }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400">{{ $menu->description
                                 }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400">PHP {{
@@ -101,6 +104,14 @@
                         <input type="text" name="name" id="menuName"
                             class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                         @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Acronym Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Menu Acronym</label>
+                        <input type="text" name="acronym" id="menuAcronym"
+                            class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                        @error('acronym') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <!-- Description Field -->
