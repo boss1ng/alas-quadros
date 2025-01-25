@@ -48,14 +48,6 @@
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Quantity per Box
                             </th>
-                            {{-- <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Price per item
-                            </th>
-                            <th
-                                class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
-                                Total
-                            </th> --}}
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 dark:text-gray-300">
                                 Actions
@@ -88,10 +80,6 @@
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
                                 <div class="flex items-center justify-center space-x-2">
-                                    {{-- <a href="{{ route('editOrder', ['id' => $inventory->id]) }}"
-                                        class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
-                                        Edit
-                                    </a> --}}
                                     <form action="{{ route('deleteItem', ['id' => $inventory->id]) }}" method="POST"
                                         class="inline-block"
                                         onsubmit="return confirm('Are you sure you want to delete this item?')">
@@ -109,11 +97,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Pagination Links -->
-            {{-- <div class="mt-4">
-                {{ $inventories->links() }}
-            </div> --}}
         </div>
     </div>
 
@@ -132,14 +115,21 @@
                     <!-- Item Name Field -->
                     <div class="mb-4">
                         <label class="block text-gray-700 font-semibold mb-2">Item Name</label>
-                        <select name="itemName" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                        <select id="itemName" name="itemName" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500" onchange="toggleCustomInput()">
                             <option value="" disabled selected>Select an item</option>
                             <option value="Mayonnaise">Mayonnaise</option>
                             <option value="Chicken">Chicken</option>
                             <option value="Sibuyas">Sibuyas</option>
                             <option value="Bawang">Bawang</option>
-                            <option value="Custom">Custom</option>
+                            <option value="Custom">- Custom -</option>
                         </select>
+
+                        <!-- Custom Item Name Input -->
+                        <div id="customItemNameDiv" class="mt-2 hidden">
+                            <input type="text" name="itemName" id="customItemName"
+                                class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500" placeholder="Enter item name">
+                        </div>
+
                         @error('itemName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
@@ -197,9 +187,21 @@
 
     <!-- JavaScript to handle modal functionality -->
     <script>
+        function toggleCustomInput() {
+            var select = document.getElementById("itemName");
+            var customItemNameDiv = document.getElementById("customItemNameDiv");
+
+            if (select.value === "Custom") {
+                customItemNameDiv.classList.remove("hidden");
+                select.name = ""; // Remove the name from select to avoid sending it when Custom is selected
+            } else {
+                customItemNameDiv.classList.add("hidden");
+                select.name = "itemName"; // Reassign name to the select when not Custom
+            }
+        }
+
         // Get elements
         const inventoryModal = document.getElementById('inventoryModal');
-        // const openModalBtn = document.getElementById('openModalBtn');
 
         const openInModalBtn = document.getElementById("openInModalBtn");
         const openOutModalBtn = document.getElementById("openOutModalBtn");

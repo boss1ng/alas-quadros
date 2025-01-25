@@ -71,11 +71,14 @@ class InventoryController extends Controller
                     // 'quantityPerPackage' => $inventory->quantityPerPackage + ($request->quantityPerPackage ?? 0),
                 ]);
             } else {
+                // Check if quantityPerPackage has a value
+                $quantityPerPackage = $request->quantityPerPackage ? $request->quantityPerPackage : null;
+
                 Inventory::create([
                     'itemName' => $request->itemName,
                     'quantity' => $request->quantity,
                     'unitOfMeasurement' => $request->unitOfMeasurement,
-                    'quantityPerPackage' => $request->quantityPerPackage,
+                    'quantityPerPackage' => $quantityPerPackage,
                 ]);
             }
 
