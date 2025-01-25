@@ -42,7 +42,7 @@ class OrderController extends Controller
         // Validate the incoming request
         $request->validate([
             'customer_name' => 'required|string|max:255',
-            'discount' => 'required|integer',
+            'discount' => 'integer',
             'orders' => 'required|array',
             'total_price' => 'required|numeric',  // Ensure total_price is numeric
             'orders.*.quantity' => 'required|numeric|min:1',

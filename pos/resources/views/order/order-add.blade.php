@@ -48,8 +48,8 @@
                             <!-- Discounts -->
                             <div class="flex-1">
                                 <label for="discount" class="block text-gray-700 font-semibold mb-2">Discount</label>
-                                <select name="discount" id="discount" required class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
-                                    <option value="">- None -</option>
+                                <select name="discount" id="discount" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                                    <option value="0">- None -</option>
                                     @foreach($discounts as $discount)
                                     <option value="{{ $discount->id }}" data-discount="{{ $discount->discount }}">
                                         {{ $discount->name }} ({{ $discount->discount }}%)
