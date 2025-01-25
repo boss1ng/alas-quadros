@@ -49,7 +49,7 @@ class InventoryController extends Controller
         return view('inventory.inventory-form');
     }
 
-    public function in(Request $request)
+    public function inOut(Request $request)
     {
         // Validation logic for name, description, price, and image
         $request->validate([
@@ -59,32 +59,45 @@ class InventoryController extends Controller
             'quantityPerPackage' => 'nullable|numeric',
         ]);
 
-        // Find the existing inventory record by itemName
+        // Check if the action is "in" or "out"
+        $actionType = $request->input('actionType');
+
         $inventory = Inventory::where('itemName', $request->itemName)->first();
 
-        if ($inventory) {
-            // If the record exists, update its quantity and quantityPerPackage
-            $inventory->update([
-                'quantity' => $inventory->quantity + $request->quantity,
-            ]);
-        } else {
-            // If the record does not exist, create a new one
-            Inventory::create([
-                'itemName' => $request->itemName,
-                'quantity' => $request->quantity,
-                'unitOfMeasurement' => $request->unitOfMeasurement,
-                'quantityPerPackage' => $request->quantityPerPackage,
-            ]);
+        if ($actionType === 'in') {
+            if ($inventory) {
+                $inventory->update([
+                    'quantity' => $inventory->quantity + $request->quantity,
+                    'quantityPerPackage' => $inventory->quantityPerPackage + ($request->quantityPerPackage ?? 0),
+                ]);
+            } else {
+                Inventory::create([
+                    'itemName' => $request->itemName,
+                    'quantity' => $request->quantity,
+                    'unitOfMeasurement' => $request->unitOfMeasurement,
+                    'quantityPerPackage' => $request->quantityPerPackage,
+                ]);
+            }
+
+            return redirect()->route('inventory-management')->with('success', 'Item In successfully!');
+        } elseif ($actionType === 'out') {
+            if ($inventory) {
+                $newQuantity = $inventory->quantity - $request->quantity;
+
+                if ($newQuantity < 0) {
+                    return redirect()->back()->with('error', 'Insufficient stock!');
+                }
+
+                $inventory->update([
+                    'quantity' => $newQuantity,
+                    'quantityPerPackage' => max(0, $inventory->quantityPerPackage - ($request->quantityPerPackage ?? 0)),
+                ]);
+            } else {
+                return redirect()->route('inventory-management')->with('error', 'Item not existing');
+            }
+
+            return redirect()->route('inventory-management')->with('success', 'Item Out successfully!');
         }
-
-        return redirect()->route('inventory-management')->with('success', 'Item In successfully!');
-    }
-
-    public function out()
-    {
-
-
-        return redirect()->route('inventory-management')->with('success', 'Item Out successfully!');
     }
 
     /**

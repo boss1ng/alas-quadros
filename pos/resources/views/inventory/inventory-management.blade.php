@@ -8,9 +8,13 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             @if(session('success'))
-            <div id="success-message" class="bg-green-500 text-white p-4 mb-4 rounded">
-                {{ session('success') }}
-            </div>
+                <div id="alertMessage" class="bg-green-500 text-white p-4 mb-4 rounded">
+                    {{ session('success') }}
+                </div>
+            @elseif(session('error'))
+                <div id="alertMessage" class="bg-red-500 text-white p-4 mb-4 rounded">
+                    {{ session('error') }}
+                </div>
             @endif
 
             <div class="flex items-center justify-end mb-4">
@@ -116,7 +120,7 @@
             </div>
 
             <div class="mt-4 overflow-y-auto" style="max-height: 500px;">
-                <form id="inventoryForm" method="POST" action="{{ route('inventoryIn') }}" enctype="multipart/form-data">
+                <form id="inventoryForm" method="POST" action="{{ route('inventoryInOut') }}" enctype="multipart/form-data">
                     @csrf
 
                     <!-- Item Name Field -->
@@ -128,6 +132,7 @@
                             <option value="Chicken">Chicken</option>
                             <option value="Sibuyas">Sibuyas</option>
                             <option value="Bawang">Bawang</option>
+                            <option value="Custom">Custom</option>
                         </select>
                         @error('itemName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -159,23 +164,27 @@
                             class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
                         @error('quantityPerPackage') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
+
+                    <!-- Add a hidden input field to track the action -->
+                    <input type="hidden" name="actionType" id="actionType" value="">
                 </form>
             </div>
 
             <div class="mt-6 flex justify-end space-x-2">
                 <button id="cancelBtn" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400">Cancel</button>
                 <button id="inBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">In</button>
+                <button id="outBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Out</button>
             </div>
         </div>
     </div>
 
     <script>
         // Check if the success message is present
-        const successMessage = document.getElementById('success-message');
-        if (successMessage) {
+        const alertMessage = document.getElementById('alertMessage');
+        if (alertMessage) {
             // Hide the success message after 3 seconds
             setTimeout(() => {
-                successMessage.style.display = 'none';
+                alertMessage.style.display = 'none';
             }, 3000); // 3000ms = 3 seconds
         }
     </script>
@@ -190,6 +199,7 @@
         const inBtn = document.getElementById('inBtn');
         const modalTitle = document.getElementById('modalTitle');
         const inventoryForm = document.getElementById('inventoryForm');
+        const actionTypeInput = document.getElementById('actionType');
 
         // Open modal
         openModalBtn.addEventListener('click', () => {
@@ -204,6 +214,18 @@
 
         cancelBtn.addEventListener('click', () => {
             inventoryModal.classList.add('hidden');
+        });
+
+        // Handle "In" button click
+        inBtn.addEventListener('click', () => {
+            actionTypeInput.value = 'in'; // Set the action type to "in"
+            inventoryForm.submit(); // Submit the form
+        });
+
+        // Handle "Out" button click
+        outBtn.addEventListener('click', () => {
+            actionTypeInput.value = 'out'; // Set the action type to "out"
+            inventoryForm.submit(); // Submit the form
         });
 
         // Inventory Form
