@@ -15,12 +15,12 @@
 
             <div class="flex items-center justify-end mb-4">
                 <!-- In/Out Item Button -->
-                <a href="{{ route('inventoryForm') }}" class="bg-blue-500 text-white px-4 py-2 rounded">
+                <button id="openModalBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
                     In / Out
-                </a>
+                </button>
             </div>
 
-            <!-- Sales Table -->
+            <!-- Inventory Table -->
             <div class="mt-4 overflow-x-auto">
                 <table class="min-w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                     <thead class="bg-gray-100 dark:bg-gray-700">
@@ -107,15 +107,109 @@
         </div>
     </div>
 
+    <!-- Modal for Inventory -->
+    <div id="inventoryModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 hidden">
+        <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="modalTitle" class="text-lg font-semibold">Inventory Form</h3>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">&times;</button>
+            </div>
+
+            <div class="mt-4 overflow-y-auto" style="max-height: 500px;">
+                <form id="inventoryForm" method="POST" action="{{ route('inventoryIn') }}" enctype="multipart/form-data">
+                    @csrf
+
+                    <!-- Item Name Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Item Name</label>
+                        <select name="itemName" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                            <option value="" disabled selected>Select an item</option>
+                            <option value="Mayonnaise">Mayonnaise</option>
+                            <option value="Chicken">Chicken</option>
+                            <option value="Sibuyas">Sibuyas</option>
+                            <option value="Bawang">Bawang</option>
+                        </select>
+                        @error('itemName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Quantity Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Quantity</label>
+                        <input type="number" name="quantity"
+                            class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                        @error('quantity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Unit of Measurement Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Unit of Measurement</label>
+                        <select name="unitOfMeasurement" class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                            <option value="" disabled selected>Select an item</option>
+                            <option value="Boxes">Boxes</option>
+                            <option value="Kilo">Kilo</option>
+                            <option value="Pieces">Pieces</option>
+                        </select>
+                        @error('unitOfMeasurement') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+
+                    <!-- Quantity per Box Field -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-semibold mb-2">Quantity per Box</label>
+                        <input type="number" name="quantityPerPackage"
+                            class="w-full border-gray-300 rounded-lg focus:ring focus:ring-blue-500">
+                        @error('quantityPerPackage') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                </form>
+            </div>
+
+            <div class="mt-6 flex justify-end space-x-2">
+                <button id="cancelBtn" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400">Cancel</button>
+                <button id="inBtn" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">In</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Check if the success message is present
         const successMessage = document.getElementById('success-message');
         if (successMessage) {
             // Hide the success message after 3 seconds
             setTimeout(() => {
-            successMessage.style.display = 'none';
+                successMessage.style.display = 'none';
             }, 3000); // 3000ms = 3 seconds
         }
+    </script>
+
+    <!-- JavaScript to handle modal functionality -->
+    <script>
+        // Get elements
+        const inventoryModal = document.getElementById('inventoryModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const inBtn = document.getElementById('inBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const inventoryForm = document.getElementById('inventoryForm');
+
+        // Open modal
+        openModalBtn.addEventListener('click', () => {
+            inventoryModal.classList.remove('hidden');
+            modalTitle.innerText = 'Inventory Form';
+        });
+
+        // Close modal
+        closeModalBtn.addEventListener('click', () => {
+            inventoryModal.classList.add('hidden');
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            inventoryModal.classList.add('hidden');
+        });
+
+        // Inventory Form
+        inBtn.addEventListener('click', () => {
+            inventoryForm.submit(); // Trigger form submission (or implement your own AJAX logic)
+        });
     </script>
 
 </x-app-layout>

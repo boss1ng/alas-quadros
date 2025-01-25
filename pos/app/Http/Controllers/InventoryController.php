@@ -46,12 +46,36 @@ class InventoryController extends Controller
 
     public function inventoryForm()
     {
-        return view('inventory.inventory-add');
+        return view('inventory.inventory-form');
     }
 
-    public function in()
+    public function in(Request $request)
     {
+        // Validation logic for name, description, price, and image
+        $request->validate([
+            'itemName' => 'required|string|max:255',
+            'quantity' => 'required|numeric',
+            'unitOfMeasurement' => 'required|string',
+            'quantityPerPackage' => 'nullable|numeric',
+        ]);
 
+        // Find the existing inventory record by itemName
+        $inventory = Inventory::where('itemName', $request->itemName)->first();
+
+        if ($inventory) {
+            // If the record exists, update its quantity and quantityPerPackage
+            $inventory->update([
+                'quantity' => $inventory->quantity + $request->quantity,
+            ]);
+        } else {
+            // If the record does not exist, create a new one
+            Inventory::create([
+                'itemName' => $request->itemName,
+                'quantity' => $request->quantity,
+                'unitOfMeasurement' => $request->unitOfMeasurement,
+                'quantityPerPackage' => $request->quantityPerPackage,
+            ]);
+        }
 
         return redirect()->route('inventory-management')->with('success', 'Item In successfully!');
     }
