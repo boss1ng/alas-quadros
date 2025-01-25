@@ -110,21 +110,24 @@
 
                         <!-- Total Price and Submit Button -->
                         <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-white border-t border-gray-300 shadow-lg p-4 z-50">
-                            <div class="flex items-center justify-between" style="padding: 0 18% 0 18%">
-                                <!-- Total Price -->
-                                <div class="flex items-center space-x-4">
-                                    <label for="totalPrice" class="block text-gray-700 font-semibold mb-2">Total Price</label>
-                                    <input type="text" id="totalPrice" name="total_price" readonly
-                                        class="border-gray-300 rounded-lg bg-gray-100" style="width: 350px;">
-                                </div>
+                            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                                <div class="flex items-center justify-between">
+                                    <!-- Total Price -->
+                                    <div class="flex items-center space-x-4">
+                                        <label for="totalPrice" class="block text-gray-700 font-semibold mb-2 min-w-[80px]">Total Price</label>
+                                        <input type="text" id="totalPrice" name="total_price" readonly
+                                            class="border-gray-300 rounded-lg bg-gray-100 w-full min-w-[150px]">
+                                    </div>
 
-                                <!-- Submit Button -->
-                                <div class="flex justify-end space-x-2">
-                                    <a href="{{ route('order') }}" class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400 inline-block">
-                                        Cancel
-                                    </a>
-                                    <button type="submit"
-                                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Place Order</button>
+                                    <!-- Submit Button -->
+                                    <div class="flex justify-end space-x-2">
+                                        <a href="{{ route('order') }}"
+                                            class="bg-gray-300 px-4 py-2 rounded text-gray-700 hover:bg-gray-400 inline-block">
+                                            Cancel
+                                        </a>
+                                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Place
+                                            Order</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
