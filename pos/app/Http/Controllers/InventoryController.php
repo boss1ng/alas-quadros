@@ -79,13 +79,13 @@ class InventoryController extends Controller
                 ]);
             }
 
-            return redirect()->route('inventory-management')->with('success', 'Item In successfully!');
+            return redirect()->route('inventory-management')->with('success', 'Item IN successfully!');
         } elseif ($actionType === 'out') {
             if ($inventory) {
                 $newQuantity = $inventory->quantity - $request->quantity;
 
                 if ($newQuantity < 0) {
-                    return redirect()->back()->with('error', 'Insufficient stock!');
+                    return redirect()->route('inventory-management')->with('error', 'Insufficient stock');
                 }
 
                 $inventory->update([
@@ -96,7 +96,7 @@ class InventoryController extends Controller
                 return redirect()->route('inventory-management')->with('error', 'Item not existing');
             }
 
-            return redirect()->route('inventory-management')->with('success', 'Item Out successfully!');
+            return redirect()->route('inventory-management')->with('success', 'Item OUT successfully!');
         }
     }
 
@@ -143,8 +143,13 @@ class InventoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Inventory $inventory)
+    public function destroy($id)
     {
-        //
+        $inventory = Inventory::findOrFail($id);
+
+        $inventory->delete();
+
+        // Redirect back to the previous page
+        return back()->with('success', 'Item deleted successfully!');
     }
 }

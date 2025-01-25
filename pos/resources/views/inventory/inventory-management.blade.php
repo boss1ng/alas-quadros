@@ -17,7 +17,7 @@
                 </div>
             @endif
 
-            <div class="flex items-center justify-end mb-4">
+            <div class="flex items-center justify-end mb-4 space-x-3">
                 <!-- In/Out Item Button -->
                 <button id="openInModalBtn" class="bg-blue-500 text-white px-4 py-2 rounded">
                     In
@@ -84,12 +84,12 @@
                             </td>
                             <td
                                 class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{-- <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ route('editOrder', ['id' => $inventory->id]) }}"
+                                <div class="flex items-center justify-center space-x-2">
+                                    {{-- <a href="{{ route('editOrder', ['id' => $inventory->id]) }}"
                                         class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
                                         Edit
-                                    </a>
-                                    <form action="{{ route('deleteOrder', ['id' => $inventory->id]) }}" method="POST"
+                                    </a> --}}
+                                    <form action="{{ route('deleteItem', ['id' => $inventory->id]) }}" method="POST"
                                         class="inline-block"
                                         onsubmit="return confirm('Are you sure you want to delete this item?')">
                                         @csrf
@@ -99,7 +99,7 @@
                                             Delete
                                         </button>
                                     </form>
-                                </div> --}}
+                                </div>
                             </td>
                         </tr>
                         @endforeach
