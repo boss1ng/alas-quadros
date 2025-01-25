@@ -14,7 +14,8 @@ class Order extends Model
         'orders',
         'total_price',
         'discount',
-        'isPaid',
+        'isPaidCash',
+        'isPaidGCash',
         'isCooking',
         'isServed',
         'notes'

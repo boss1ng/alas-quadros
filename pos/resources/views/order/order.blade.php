@@ -47,7 +47,7 @@
                                 Total
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
-                                rowspan="2">
+                                colspan="2">
                                 Paid
                             </th>
                             <th class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300"
@@ -77,6 +77,14 @@
                             <th
                                 class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
                                 Quantity
+                            </th>
+                            <th
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                Cash
+                            </th>
+                            <th
+                                class="px-6 py-3 text-center text-lg font-large text-gray-500 uppercase dark:text-gray-300">
+                                GCash
                             </th>
                         </tr>
                     </thead>
@@ -117,7 +125,10 @@
                                 PHP {{ number_format($order->total_price, 2) }}
                             </td>
                             <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isPaid ? 'checked' : '' }} class="payment-checkbox" data-order-id="{{ $order->id }}"/>
+                                <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="cash-payment-checkbox" data-order-id="{{ $order->id }}"/>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="gcash-payment-checkbox" data-order-id="{{ $order->id }}"/>
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <input type="checkbox" {{ $order->isCooking ? 'checked' : '' }} class="cooking-checkbox" data-order-id="{{ $order->id }}"/>
@@ -172,20 +183,39 @@
         }
 
         // Event listener for checkbox click
-        document.querySelectorAll('.payment-checkbox').forEach(checkbox => {
+        document.querySelectorAll('.cash-payment-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', function () {
                 const isChecked = this.checked;
                 const orderId = this.getAttribute('data-order-id');
 
                 // Send the AJAX request to update the payment status
-                fetch(`/order/update-payment/${orderId}`, {
+                fetch(`/order/update-payment-cash/${orderId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        isPaid: isChecked
+                        isPaidCash: isChecked
+                    })
+                })
+                .then(response => console.log("Updated payment."))
+            });
+        });
+        document.querySelectorAll('.gcash-payment-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const isChecked = this.checked;
+                const orderId = this.getAttribute('data-order-id');
+
+                // Send the AJAX request to update the payment status
+                fetch(`/order/update-payment-gcash/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({
+                        isPaidGCash: isChecked
                     })
                 })
                 .then(response => console.log("Updated payment."))

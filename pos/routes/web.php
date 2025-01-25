@@ -26,7 +26,8 @@ Route::middleware([
     Route::get('/order/', [OrderController::class, 'index'])->name('order');
     Route::get('/order/new-order', [OrderController::class, 'orderForm'])->name('placeOrder');
     Route::post('/order/new-order/create', [OrderController::class, 'store'])->name('createOrder');
-    Route::post('/order/update-payment/{id}', [OrderController::class, 'updatePayment'])->name('updatePayment');
+    Route::post('/order/update-payment-cash/{id}', [OrderController::class, 'updatePaymentCash']);
+    Route::post('/order/update-payment-gcash/{id}', [OrderController::class, 'updatePaymentGCash']);
     Route::post('/order/update-cooking/{id}', [OrderController::class, 'updateCookingStatus'])->name('updateCookingStatus');
     Route::post('/order/update-served/{id}', [OrderController::class, 'updateServingStatus'])->name('updateServingStatus');
     Route::get('/order/edit/{id}', [OrderController::class, 'edit'])->name('editOrder');
