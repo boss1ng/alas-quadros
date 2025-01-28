@@ -86,60 +86,70 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $order)
-                            <tr
-                                class="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                    {{ $order->customer_name }}
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                    @foreach(json_decode($order->orders) as $item)
-                                        {{-- Find the menu name by matching menu_id --}}
-                                        @php
-                                            $menu = $menus->firstWhere('id', $item->menu_id);
-                                        @endphp
-                                        <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
-                                    @endforeach
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                    @foreach(json_decode($order->orders) as $item)
-                                        <div>{{ $item->quantity }}</div>
-                                    @endforeach
-                                </td>
-                                <td
-                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                    PHP {{ number_format($order->total_price, 2) }}
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="payment-checkbox"
-                                    data-order-id="{{ $order->id }}" disabled readonly/>
-                                </td>
-                                <td class="px-6 py-4 text-center">
-                                    <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="payment-checkbox"
-                                    data-order-id="{{ $order->id }}" disabled readonly/>
+                        @if ($orders->isEmpty())
+                            <tr>
+                                <td colspan="10" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                                    No records found in Sales.
                                 </td>
                             </tr>
-                        @endforeach
+                        @else
+                            @foreach($orders as $order)
+                                <tr
+                                    class="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                        {{ $order->customer_name }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                        @foreach(json_decode($order->orders) as $item)
+                                            {{-- Find the menu name by matching menu_id --}}
+                                            @php
+                                                $menu = $menus->firstWhere('id', $item->menu_id);
+                                            @endphp
+                                            <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
+                                        @endforeach
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                        @foreach(json_decode($order->orders) as $item)
+                                            <div>{{ $item->quantity }}</div>
+                                        @endforeach
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                        PHP {{ number_format($order->total_price, 2) }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="payment-checkbox"
+                                        data-order-id="{{ $order->id }}" disabled readonly/>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="payment-checkbox"
+                                        data-order-id="{{ $order->id }}" disabled readonly/>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                     </tbody>
 
                     <!-- Footer Row for Total Sales (Only on Last Page) -->
-                    @if ($orders->currentPage() == $orders->lastPage())
-                        <tfoot class="w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-                            <tr class="bg-gray-100 dark:bg-gray-700">
-                                <td colspan="3"
-                                    class="px-6 py-4 text-end whitespace-nowrap text-lg font-medium text-gray-800 dark:text-gray-200">
-                                    TOTAL SALES
-                                </td>
-                                <td colspan="1" class="px-6 py-4 text-center text-lg font-semibold text-gray-600 dark:text-white">
-                                    PHP {{ number_format($totalSales, 2) }}
-                                </td>
-                                <td class="px-6 py-4 text-center"></td>
-                                <td class="px-6 py-4 text-center"></td>
-                            </tr>
-                        </tfoot>
+                    @if (!$orders->isEmpty())
+                        @if ($orders->currentPage() == $orders->lastPage())
+                            <tfoot class="w-full bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                                <tr class="bg-gray-100 dark:bg-gray-700">
+                                    <td colspan="3"
+                                        class="px-6 py-4 text-end whitespace-nowrap text-lg font-medium text-gray-800 dark:text-gray-200">
+                                        TOTAL SALES
+                                    </td>
+                                    <td colspan="1" class="px-6 py-4 text-center text-lg font-semibold text-gray-600 dark:text-white">
+                                        PHP {{ number_format($totalSales, 2) }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center"></td>
+                                    <td class="px-6 py-4 text-center"></td>
+                                </tr>
+                            </tfoot>
+                        @endif
                     @endif
                 </table>
             </div>

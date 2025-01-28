@@ -40,40 +40,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($users as $user)
-                        <tr
-                            class="border-t text-center border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td
-                                class="text-left px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $user->name }}
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $user->email }}
-                            </td>
-                            <td
-                                class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $user->role }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ route('editUser', ['id' => $user->id]) }}"
-                                        class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" class="inline-block"
-                                        onsubmit="return confirm('Are you sure you want to delete this user?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
+                        @if ($users->isEmpty())
+                            <tr>
+                                <td colspan="10" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                                    No records found in Users.
+                                </td>
+                            </tr>
+                        @else
+                            @foreach($users as $user)
+                            <tr
+                                class="border-t text-center border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td
+                                    class="text-left px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $user->name }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $user->email }}
+                                </td>
+                                <td
+                                    class="uppercase px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $user->role }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <a href="{{ route('editUser', ['id' => $user->id]) }}"
+                                            class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('deleteUser', ['id' => $user->id]) }}" method="POST" class="inline-block"
+                                            onsubmit="return confirm('Are you sure you want to delete this user?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
             </div>

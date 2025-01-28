@@ -89,78 +89,86 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($orders as $order)
-                        <tr
-                            class="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
-                                {{ $order->customer_name }}
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                @foreach(json_decode($order->orders) as $item)
-                                {{-- Find the menu name by matching menu_id --}}
-                                @php
-                                $menu = $menus->firstWhere('id', $item->menu_id);
-                                @endphp
-                                    @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
-                                        <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
-                                    @elseif (Auth::user()->role === "cook")
-                                        @if ($menu !== null)
-                                            <div>{{ $menu->acronym ? $menu->acronym : $menu->name }}</div>
-                                        @else
-                                            <div>Menu not found</div>
+                        @if ($orders->isEmpty())
+                            <tr>
+                                <td colspan="10" class="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                                    No records found in Orders.
+                                </td>
+                            </tr>
+                        @else
+                            @foreach($orders as $order)
+                            <tr
+                                class="border-t border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-md font-medium text-gray-800 dark:text-gray-200">
+                                    {{ $order->customer_name }}
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                    @foreach(json_decode($order->orders) as $item)
+                                    {{-- Find the menu name by matching menu_id --}}
+                                    @php
+                                    $menu = $menus->firstWhere('id', $item->menu_id);
+                                    @endphp
+                                        @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
+                                            <div>{{ $menu ? $menu->name : 'Menu not found' }}</div>
+                                        @elseif (Auth::user()->role === "cook")
+                                            @if ($menu !== null)
+                                                <div>{{ $menu->acronym ? $menu->acronym : $menu->name }}</div>
+                                            @else
+                                                <div>Menu not found</div>
+                                            @endif
                                         @endif
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                @foreach(json_decode($order->orders) as $item)
-                                <div>{{ $item->quantity }}</div>
-                                @endforeach
-                            </td>
-                            <td
-                                class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                PHP {{ number_format($order->total_price, 2) }}
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="cash-payment-checkbox" data-order-id="{{ $order->id }}"/>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="gcash-payment-checkbox" data-order-id="{{ $order->id }}"/>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isCooking ? 'checked' : '' }} class="cooking-checkbox" data-order-id="{{ $order->id }}"/>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <input type="checkbox" {{ $order->isServed ? 'checked' : '' }} class="serving-checkbox" data-order-id="{{ $order->id }}"/>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
-                                {{ $order->notes }}
-                            </td>
-                            @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
-                            <td class="px-6 py-4 whitespace-nowrap text-md">
-                                <div class="flex items-center justify-center space-x-2">
-                                    {{-- <a href="{{ route('editOrder', ['id' => $order->id]) }}"
-                                        class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
-                                        Edit
-                                    </a> --}}
-                                    <form action="{{ route('deleteOrder', ['id' => $order->id]) }}" method="POST"
-                                        class="inline-block"
-                                        onsubmit="return confirm('Are you sure you want to delete this order?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                            @endif
-                        </tr>
-                        @endforeach
+                                    @endforeach
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                    @foreach(json_decode($order->orders) as $item)
+                                    <div>{{ $item->quantity }}</div>
+                                    @endforeach
+                                </td>
+                                <td
+                                    class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                    PHP {{ number_format($order->total_price, 2) }}
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <input type="checkbox" {{ $order->isPaidCash ? 'checked' : '' }} class="cash-payment-checkbox" data-order-id="{{ $order->id }}"/>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <input type="checkbox" {{ $order->isPaidGCash ? 'checked' : '' }} class="gcash-payment-checkbox" data-order-id="{{ $order->id }}"/>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <input type="checkbox" {{ $order->isCooking ? 'checked' : '' }} class="cooking-checkbox" data-order-id="{{ $order->id }}"/>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <input type="checkbox" {{ $order->isServed ? 'checked' : '' }} class="serving-checkbox" data-order-id="{{ $order->id }}"/>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-md text-gray-600 dark:text-gray-400 text-center">
+                                    {{ $order->notes }}
+                                </td>
+                                @if (Auth::user()->role === "admin" || Auth::user()->role === "cashier")
+                                <td class="px-6 py-4 whitespace-nowrap text-md">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        {{-- <a href="{{ route('editOrder', ['id' => $order->id]) }}"
+                                            class="inline-block px-4 py-2 bg-yellow-500 text-white text-md font-medium rounded hover:bg-yellow-600 transition">
+                                            Edit
+                                        </a> --}}
+                                        <form action="{{ route('deleteOrder', ['id' => $order->id]) }}" method="POST"
+                                            class="inline-block"
+                                            onsubmit="return confirm('Are you sure you want to delete this order?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-red-500 text-white text-md font-medium rounded hover:bg-red-600 transition">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                @endif
+                            </tr>
+                            @endforeach
+                        @endif
                     </tbody>
                 </table>
 
