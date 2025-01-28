@@ -74,10 +74,13 @@
                                 <label for="menu_{{ $menu->id }}"
                                     class="w-full text-center block peer-checked:bg-gray-200 dark:peer-checked:bg-gray-200 transition-all duration-300 ease-in-out">
                                     <div class="text-center">
-                                        <div class="flex items-center justify-center">
-                                            <img src="{{ asset('storage/' . $menu->image) }}" alt="{{ $menu->name }} "
-                                                class="w-32 h-32 object-cover mb-2 rounded-lg">
-                                        </div>
+                                        {{-- @if ($menu->image !== null) --}}
+                                            <div class="flex items-center justify-center">
+                                                <img src="{{ asset('storage/' . $menu->image) }}"
+                                                    class="w-32 h-32 object-cover mb-2 rounded-lg">
+                                            </div>
+                                        {{-- @endif --}}
+
                                         <h4 class="font-semibold text-lg">{{ $menu->name }}</h4>
                                         <p class="text-gray-600 mb-2">PHP {{ number_format($menu->price, 2) }}</p>
                                     </div>
