@@ -27,24 +27,24 @@
                     </div>
                 </div>
 
-                <!-- Today's Sales Card -->
+                <!-- Today's Sales Card (Cash) -->
                 <div class="bg-green-100 p-6 rounded-lg shadow-lg">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-peso-sign text-green-600 text-3xl"></i>
                         <div>
-                            <h3 class="text-lg font-semibold text-green-600">Today's Sales</h3>
-                            <p class="text-3xl font-bold">PHP {{ number_format($todaysSales, 2) }}</p>
+                            <h3 class="text-lg font-semibold text-green-600">Today's Cash Sales</h3>
+                            <p class="text-3xl font-bold">PHP {{ number_format($todaysCashSales, 2) }}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Registered Users Card -->
+                <!-- Today's Sales Card (GCash) -->
                 <div class="bg-purple-100 p-6 rounded-lg shadow-lg">
                     <div class="flex items-center space-x-4">
                         <i class="fas fa-users text-purple-600 text-3xl"></i>
                         <div>
-                            <h3 class="text-lg font-semibold text-purple-600">Registered Users</h3>
-                            <p class="text-3xl font-bold">{{ $registeredUsers }}</p>
+                            <h3 class="text-lg font-semibold text-purple-600">Today's GCash Sales</h3>
+                            <p class="text-3xl font-bold">PHP {{ number_format($todaysGCashSales, 2) }}</p>
                         </div>
                     </div>
                 </div>

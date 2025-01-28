@@ -22,6 +22,16 @@ class DashboardController extends Controller
         // Today's Sales (sum of total_price for today's orders)
         $todaysSales = Order::whereDate('created_at', Carbon::today())->sum('total_price');
 
+        // Today's Sales for Cash Payments
+        $todaysCashSales = Order::whereDate('created_at', Carbon::today())
+            ->where('isPaidCash', true)
+            ->sum('total_price');
+
+        // Today's Sales for GCash Payments
+        $todaysGCashSales = Order::whereDate('created_at', Carbon::today())
+            ->where('isPaidGCash', true)
+            ->sum('total_price');
+
         // Registered Users count
         $registeredUsers = User::count();
 
@@ -90,13 +100,11 @@ class DashboardController extends Controller
         $productSalesNames = $productSales->pluck('menu_id')->map(fn($id) => $menuNames[$id] ?? 'Unknown');
         $productSalesQuantities = $productSales->pluck('quantity');
 
-        // \Log::info('Product Sales: ', $productSalesNames->toArray());
-        // \Log::info('Menu Names: ', $productSalesQuantities->toArray());
-
-        // return view('dashboard', compact('todaysOrders', 'todaysSales', 'registeredUsers', 'salesData', 'productSales', 'filterSalesReport', 'filterProductSales', 'menuNames'));
         return view('dashboard', compact(
             'todaysOrders',
             'todaysSales',
+            'todaysCashSales',
+            'todaysGCashSales',
             'registeredUsers',
             'salesData',
             'filterSalesReport',
