@@ -41,10 +41,21 @@
                             {{ __('Users') }}
                         </x-nav-link>
 
-                    @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
-                        <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                            {{ __('Orders') }}
-                        </x-nav-link>
+                    @else
+                        @if (Auth::user()->role === "cook")
+                            <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                                {{ __('Orders') }}
+                            </x-nav-link>
+
+                            <x-nav-link href="{{ route('inventory-management') }}" :active="request()->routeIs('inventory-management')">
+                                {{ __('Inventory') }}
+                            </x-nav-link>
+
+                        @elseif (Auth::user()->role === "cashier")
+                            <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                                {{ __('Orders') }}
+                            </x-nav-link>
+                        @endif
                     @endif
                 </div>
             </div>
@@ -199,10 +210,21 @@
                     {{ __('Users') }}
                 </x-responsive-nav-link>
 
-            @elseif (Auth::user()->role === "cook" || Auth::user()->role === "cashier")
-                <x-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
-                    {{ __('Orders') }}
-                </x-nav-link>
+            @else
+                @if (Auth::user()->role === "cook")
+                    <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                        {{ __('Orders') }}
+                    </x-responsive-nav-link>
+
+                    <x-responsive-nav-link href="{{ route('inventory-management') }}" :active="request()->routeIs('inventory-management')">
+                        {{ __('Inventory') }}
+                    </x-responsive-nav-link>
+
+                @elseif (Auth::user()->role === "cashier")
+                    <x-responsive-nav-link href="{{ route('order') }}" :active="request()->routeIs('order')">
+                        {{ __('Orders') }}
+                    </x-responsive-nav-link>
+                @endif
             @endif
         </div>
 
