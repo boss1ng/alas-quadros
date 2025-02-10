@@ -11,6 +11,7 @@ const __dirname = dirname(__filename);
 
 // Define MySQL credentials
 const mysqldumpPath = `"C:\\PHP\\8.2.12\\mysql\\bin\\mysqldump.exe"`;
+// const mysqldumpPath = `"C:\\xampp\\mysql\\bin\\mysqldump.exe"`;
 const dbUser = "root";
 const dbPassword = "";
 const dbName = "alas_quadros";
