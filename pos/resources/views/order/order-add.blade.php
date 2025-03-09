@@ -196,6 +196,10 @@
             breakdownTableBody.innerHTML = ''; // Clear the table body
 
             let totalPriceWithoutDiscount = 0;
+            let highestPriceItem = null;
+
+            // Store selected items in an array to determine the highest-priced item
+            let selectedItems = [];
 
             document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
                 const card = checkbox.closest('.card');
@@ -206,33 +210,49 @@
                 const totalItemPrice = price * quantity;
                 totalPriceWithoutDiscount += totalItemPrice;
 
-                // Add row to the table for each selected item
+                selectedItems.push({ itemName, price, quantity, totalItemPrice });
+            });
+
+            if (selectedItems.length > 0) {
+                // Find the item with the highest total price
+                highestPriceItem = selectedItems.reduce((max, item) => (item.totalItemPrice > max.totalItemPrice ? item : max), selectedItems[0]);
+            }
+
+            // Get the selected discount percentage
+            const discountSelect = document.getElementById('discount');
+            const selectedDiscount = discountSelect.options[discountSelect.selectedIndex];
+            const discountPercentage = parseFloat(selectedDiscount.getAttribute('data-discount')) || 0;
+
+            let discountAmount = 0;
+            if (highestPriceItem) {
+                discountAmount = highestPriceItem.totalItemPrice * (discountPercentage / 100);
+            }
+
+            const discountedTotalPrice = totalPriceWithoutDiscount - discountAmount;
+
+            // Populate the table
+            selectedItems.forEach(item => {
+                const isDiscounted = highestPriceItem && item.itemName === highestPriceItem.itemName;
+                const discountedPrice = isDiscounted ? item.totalItemPrice - discountAmount : item.totalItemPrice;
+
                 const row = `
                 <tr>
-                    <td class="border border-gray-300 p-2">${itemName}</td>
-                    <td class="border border-gray-300 p-2">${quantity}</td>
-                    <td class="border border-gray-300 p-2">PHP ${totalItemPrice.toFixed(2)}</td>
+                    <td class="border border-gray-300 p-2">${item.itemName}${isDiscounted ? " (Discounted)" : ""}</td>
+                    <td class="border border-gray-300 p-2">${item.quantity}</td>
+                    <td class="border border-gray-300 p-2">PHP ${discountedPrice.toFixed(2)}</td>
                 </tr>
                 `;
                 breakdownTableBody.insertAdjacentHTML('beforeend', row);
             });
 
-            // Get the selected discount percentage from the data-discount attribute
-            const discountSelect = document.getElementById('discount');
-            const selectedDiscount = discountSelect.options[discountSelect.selectedIndex];
-            const discountPercentage = parseFloat(selectedDiscount.getAttribute('data-discount')) || 0;
-
-            const discountAmount = totalPriceWithoutDiscount * (discountPercentage / 100);
-            const discountedTotalPrice = totalPriceWithoutDiscount - discountAmount;
-
-            // Add detailed total row to the table
+            // Add detailed total row
             const totalRow = `
             <tr class="bg-gray-200 font-semibold">
                 <td colspan="2" class="border border-gray-300 p-2 text-right">Total Price:</td>
                 <td class="border border-gray-300 p-2">PHP ${totalPriceWithoutDiscount.toFixed(2)}</td>
             </tr>
             <tr class="bg-gray-100 font-semibold">
-                <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discountPercentage}%):</td>
+                <td colspan="2" class="border border-gray-300 p-2 text-right">Discount (${discountPercentage}% on highest-priced item):</td>
                 <td class="border border-gray-300 p-2">- PHP ${discountAmount.toFixed(2)}</td>
             </tr>
             <tr class="bg-gray-200 font-bold">
