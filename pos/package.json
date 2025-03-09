@@ -5,7 +5,8 @@
         "build": "vite build",
         "dev": "vite",
         "serve-dev": "concurrently \"php artisan serve\" \"npm run dev\"",
-        "serve-dev-network": "node -e \"const os = require('os'); const interfaces = os.networkInterfaces(); const localIp = Object.values(interfaces).flat().find(i => i.family === 'IPv4' && !i.internal)?.address || '127.0.0.1'; require('child_process').execSync('npx concurrently \\\"npm run dev -- --host=' + localIp + ' --port=5173\\\" \\\"php artisan serve --host=' + localIp + ' --port=8000\\\"', {stdio: 'inherit'})\""
+        "serve-dev-network": "node -e \"const os = require('os'); const interfaces = os.networkInterfaces(); const localIp = Object.values(interfaces).flat().find(i => i.family === 'IPv4' && !i.internal)?.address || '127.0.0.1'; require('child_process').execSync('npx concurrently \\\"npm run dev -- --host=' + localIp + ' --port=5173\\\" \\\"php artisan serve --host=' + localIp + ' --port=8000\\\"', {stdio: 'inherit'})\"",
+        "backup": "node backup.js"
     },
     "devDependencies": {
         "@tailwindcss/forms": "^0.5.7",
